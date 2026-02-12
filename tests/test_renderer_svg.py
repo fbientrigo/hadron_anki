@@ -47,5 +47,5 @@ def test_svg_deterministic_hash_for_fixed_input():
     output = render_svg(spec)
     h = hashlib.sha256(output.encode()).hexdigest()
     # Placeholder hash - will fail initially
-    expected_hash = "DETERMINISTIC_HASH_PLACEHOLDER"
+    expected_hash = "66eaac60a74e1df4b5df8d9ef9b870aeb23a579eb360b1da77ab38cd5e03fe57"
     assert h == expected_hash
