@@ -1,3 +1,6 @@
+import hashlib
+
+
 def stable_note_guid(particle_id: str, template_version: str, model_version: str) -> str:
     """
     Generate a deterministic ID for an Anki note.
@@ -10,4 +13,5 @@ def stable_note_guid(particle_id: str, template_version: str, model_version: str
     Returns:
         A deterministic lowercase ASCII hex string.
     """
-    raise NotImplementedError("stable_note_guid is not implemented")
+    raw = f"{particle_id}|{template_version}|{model_version}".encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
