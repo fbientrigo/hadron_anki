@@ -55,14 +55,19 @@ def test_build_apkg_contract(catalog_min):
                 assert isinstance(media_data, dict)
                 
                 # Check numeric string keys and .svg values
-                svg_files = []
+                svg_keys = []
+                svg_values = []
                 for key, value in media_data.items():
                     assert key.isdigit()
                     if value.endswith(".svg"):
-                        svg_files.append(key)
-                
-                assert len(svg_files) > 0, "No .svg files found in media mapping"
+                        svg_keys.append(key)
+                        svg_values.append(value)
+
+                assert len(svg_keys) >= 3
+                assert "proton.svg" in svg_values
+                assert "neutron.svg" in svg_values
+                assert "pi_plus.svg" in svg_values
                 
                 # Verify corresponding numeric file exists in zip
-                for key in svg_files:
+                for key in svg_keys:
                     assert key in namelist
