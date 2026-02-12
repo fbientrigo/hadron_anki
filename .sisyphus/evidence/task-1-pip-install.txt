@@ -1,0 +1,30 @@
+Obtaining file:///mnt/c/Users/Asus/Documents/FisicoFabi/hadron_anki
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: genanki in /home/fabi/anaconda3/lib/python3.12/site-packages (from hadron-anki==0.1.0) (0.13.1)
+Requirement already satisfied: pyyaml in /home/fabi/anaconda3/lib/python3.12/site-packages (from hadron-anki==0.1.0) (6.0.1)
+Requirement already satisfied: pytest in /home/fabi/anaconda3/lib/python3.12/site-packages (from hadron-anki==0.1.0) (7.4.4)
+Requirement already satisfied: cached-property in /home/fabi/anaconda3/lib/python3.12/site-packages (from genanki->hadron-anki==0.1.0) (2.0.1)
+Requirement already satisfied: frozendict in /home/fabi/anaconda3/lib/python3.12/site-packages (from genanki->hadron-anki==0.1.0) (2.4.2)
+Requirement already satisfied: chevron in /home/fabi/anaconda3/lib/python3.12/site-packages (from genanki->hadron-anki==0.1.0) (0.14.0)
+Requirement already satisfied: iniconfig in /home/fabi/anaconda3/lib/python3.12/site-packages (from pytest->hadron-anki==0.1.0) (1.1.1)
+Requirement already satisfied: packaging in /home/fabi/anaconda3/lib/python3.12/site-packages (from pytest->hadron-anki==0.1.0) (24.1)
+Requirement already satisfied: pluggy<2.0,>=0.12 in /home/fabi/anaconda3/lib/python3.12/site-packages (from pytest->hadron-anki==0.1.0) (1.0.0)
+Building wheels for collected packages: hadron-anki
+  Building editable for hadron-anki (pyproject.toml): started
+  Building editable for hadron-anki (pyproject.toml): finished with status 'done'
+  Created wheel for hadron-anki: filename=hadron_anki-0.1.0-0.editable-py3-none-any.whl size=2279 sha256=3707bbd8c09a721a34ece9da3c843abc6dafda694ea491d7c2ed2bc098627d4f
+  Stored in directory: /tmp/pip-ephem-wheel-cache-y74s6iul/wheels/8f/04/8a/70d844d123e91aca7f17c1eb32c17f631cf1da58e1b2050b83
+Successfully built hadron-anki
+Installing collected packages: hadron-anki
+  Attempting uninstall: hadron-anki
+    Found existing installation: hadron_anki 0.1.0
+    Uninstalling hadron_anki-0.1.0:
+      Successfully uninstalled hadron_anki-0.1.0
+Successfully installed hadron-anki-0.1.0

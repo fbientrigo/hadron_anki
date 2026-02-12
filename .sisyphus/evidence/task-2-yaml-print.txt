@@ -1,0 +1,1 @@
+{'particles': [{'id': 'proton', 'name': 'Proton', 'type': 'baryon', 'quarks': ['u', 'u', 'd'], 'aliases': ['p']}, {'id': 'neutron', 'name': 'Neutron', 'type': 'baryon', 'quarks': ['u', 'd', 'd'], 'aliases': ['n']}, {'id': 'pi_plus', 'name': 'Pion Plus', 'type': 'meson', 'quarks': ['u', 'anti-d'], 'aliases': ['pi+']}]}

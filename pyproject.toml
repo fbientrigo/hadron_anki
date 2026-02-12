@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hadron-anki"
+version = "0.1.0"
+description = "A TDD-first Anki card generator"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "genanki",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
