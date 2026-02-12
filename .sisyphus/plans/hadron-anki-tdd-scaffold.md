@@ -60,9 +60,9 @@ Establish a working Python package scaffold and a strict TDD test suite that def
   - `tests/conftest.py` (shared fixture for loading YAML)
 
 ### Definition of Done
-- [ ] `python -m pip install -e ".[dev]"` succeeds
-- [ ] `pytest --collect-only` collects exactly the four required test modules
-- [ ] `pytest` fails (non-zero) due to explicit `NotImplementedError` in the planned stubs (and NOT due to `ImportError`)
+- [x] `python -m pip install -e ".[dev]"` succeeds
+- [x] `pytest --collect-only` collects exactly the four required test modules
+- [x] `pytest` fails (non-zero) due to explicit `NotImplementedError` in the planned stubs (and NOT due to `ImportError`)
 
 ### Must Have
 - Strict TDD RED state with explicit `NotImplementedError` from planned APIs
