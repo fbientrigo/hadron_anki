@@ -1,0 +1,46 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+____________________ test_front_html_returns_exact_img_tag _____________________
+
+    def test_front_html_returns_exact_img_tag():
+        filename = "proton.svg"
+        expected = f'<img src="{filename}">'
+>       assert front_html(filename) == expected
+               ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_templates.py:8: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+media_filename = 'proton.svg'
+
+    def front_html(media_filename: str) -> str:
+>       raise NotImplementedError("front_html is not implemented")
+E       NotImplementedError: front_html is not implemented
+
+src/hadron_anki/cards/templates.py:4: NotImplementedError
+___________________ test_back_html_contains_required_fields ____________________
+
+    def test_back_html_contains_required_fields():
+        spec = ParticleSpec(
+            id="p",
+            name="Proton",
+            type="baryon",
+            quarks=["u", "u", "d"]
+        )
+>       html = back_html(spec)
+               ^^^^^^^^^^^^^^^
+
+tests/test_templates.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+spec = ParticleSpec(id='p', name='Proton', type='baryon', quarks=['u', 'u', 'd'])
+
+    def back_html(spec: ParticleSpec) -> str:
+>       raise NotImplementedError("back_html is not implemented")
+E       NotImplementedError: back_html is not implemented
+
+src/hadron_anki/cards/templates.py:7: NotImplementedError
+=========================== short test summary info ============================
+FAILED tests/test_templates.py::test_front_html_returns_exact_img_tag - NotIm...
+FAILED tests/test_templates.py::test_back_html_contains_required_fields - Not...
+2 failed in 0.77s

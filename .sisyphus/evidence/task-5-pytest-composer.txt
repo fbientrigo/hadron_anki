@@ -1,0 +1,153 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_____________ test_normalize_quark_token_canonicalizes_antiquarks ______________
+
+    def test_normalize_quark_token_canonicalizes_antiquarks():
+        """canonical antiquark token uses anti- prefix"""
+>       assert normalize_quark_token("ubar") == "anti-u"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_composer.py:7: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+token = 'ubar'
+
+    def normalize_quark_token(token: str) -> str:
+        """
+        Normalizes quark/antiquark tokens to canonical form.
+        Canonical form uses 'anti-' prefix for antiquarks (e.g., 'anti-u').
+        """
+>       raise NotImplementedError()
+E       NotImplementedError
+
+src/hadron_anki/domain/composer.py:8: NotImplementedError
+___________________ test_normalize_quark_token_is_idempotent ___________________
+
+    def test_normalize_quark_token_is_idempotent():
+        """idempotent on already-normalized tokens"""
+>       assert normalize_quark_token("anti-u") == "anti-u"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_composer.py:12: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+token = 'anti-u'
+
+    def normalize_quark_token(token: str) -> str:
+        """
+        Normalizes quark/antiquark tokens to canonical form.
+        Canonical form uses 'anti-' prefix for antiquarks (e.g., 'anti-u').
+        """
+>       raise NotImplementedError()
+E       NotImplementedError
+
+src/hadron_anki/domain/composer.py:8: NotImplementedError
+__________ test_normalize_quark_token_leaves_regular_quarks_unchanged __________
+
+    def test_normalize_quark_token_leaves_regular_quarks_unchanged():
+        """regular quarks (e.g., 'u', 'd') -> output unchanged"""
+>       assert normalize_quark_token("u") == "u"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_composer.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+token = 'u'
+
+    def normalize_quark_token(token: str) -> str:
+        """
+        Normalizes quark/antiquark tokens to canonical form.
+        Canonical form uses 'anti-' prefix for antiquarks (e.g., 'anti-u').
+        """
+>       raise NotImplementedError()
+E       NotImplementedError
+
+src/hadron_anki/domain/composer.py:8: NotImplementedError
+_____________ test_validate_quark_count_baryon_must_have_3_quarks ______________
+
+    def test_validate_quark_count_baryon_must_have_3_quarks():
+        """baryon must have 3 quarks"""
+        spec = ParticleSpec(id="p", name="proton", type="baryon", quarks=["u", "u"])
+        with pytest.raises(ValueError, match="baryon must have 3 quarks"):
+>           validate_quark_count(spec)
+
+tests/test_composer.py:24: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+spec = ParticleSpec(id='p', name='proton', type='baryon', quarks=['u', 'u'])
+
+    def validate_quark_count(spec: ParticleSpec) -> None:
+        """
+        Validates that the number of quarks matches the particle type.
+        - baryon: 3 quarks
+        - meson: 2 quarks
+    
+        Raises:
+            ValueError: If quark count is invalid for the type.
+        """
+>       raise NotImplementedError()
+E       NotImplementedError
+
+src/hadron_anki/domain/composer.py:19: NotImplementedError
+______________ test_validate_quark_count_meson_must_have_2_quarks ______________
+
+    def test_validate_quark_count_meson_must_have_2_quarks():
+        """meson must have 2 quarks"""
+        spec = ParticleSpec(id="pi_plus", name="pi+", type="meson", quarks=["u", "anti-d", "d"])
+        with pytest.raises(ValueError, match="meson must have 2 quarks"):
+>           validate_quark_count(spec)
+
+tests/test_composer.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+spec = ParticleSpec(id='pi_plus', name='pi+', type='meson', quarks=['u', 'anti-d', 'd'])
+
+    def validate_quark_count(spec: ParticleSpec) -> None:
+        """
+        Validates that the number of quarks matches the particle type.
+        - baryon: 3 quarks
+        - meson: 2 quarks
+    
+        Raises:
+            ValueError: If quark count is invalid for the type.
+        """
+>       raise NotImplementedError()
+E       NotImplementedError
+
+src/hadron_anki/domain/composer.py:19: NotImplementedError
+____________________ test_validate_quark_count_valid_specs _____________________
+
+    def test_validate_quark_count_valid_specs():
+        """Valid specs -> no exception"""
+        proton = ParticleSpec(id="p", name="proton", type="baryon", quarks=["u", "u", "d"])
+        pion = ParticleSpec(id="pi_plus", name="pi+", type="meson", quarks=["u", "anti-d"])
+    
+        # Should not raise
+>       validate_quark_count(proton)
+
+tests/test_composer.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+spec = ParticleSpec(id='p', name='proton', type='baryon', quarks=['u', 'u', 'd'])
+
+    def validate_quark_count(spec: ParticleSpec) -> None:
+        """
+        Validates that the number of quarks matches the particle type.
+        - baryon: 3 quarks
+        - meson: 2 quarks
+    
+        Raises:
+            ValueError: If quark count is invalid for the type.
+        """
+>       raise NotImplementedError()
+E       NotImplementedError
+
+src/hadron_anki/domain/composer.py:19: NotImplementedError
+=========================== short test summary info ============================
+FAILED tests/test_composer.py::test_normalize_quark_token_canonicalizes_antiquarks
+FAILED tests/test_composer.py::test_normalize_quark_token_is_idempotent - Not...
+FAILED tests/test_composer.py::test_normalize_quark_token_leaves_regular_quarks_unchanged
+FAILED tests/test_composer.py::test_validate_quark_count_baryon_must_have_3_quarks
+FAILED tests/test_composer.py::test_validate_quark_count_meson_must_have_2_quarks
+FAILED tests/test_composer.py::test_validate_quark_count_valid_specs - NotImp...
+6 failed in 1.02s

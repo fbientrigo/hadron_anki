@@ -1,0 +1,121 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+____________________ test_stable_note_guid_is_deterministic ____________________
+
+    def test_stable_note_guid_is_deterministic():
+        args = ("proton", "1.0.0", "v1")
+>       id1 = stable_note_guid(*args)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_deck_apkg.py:12: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+particle_id = 'proton', template_version = '1.0.0', model_version = 'v1'
+
+    def stable_note_guid(particle_id: str, template_version: str, model_version: str) -> str:
+        """
+        Generate a deterministic ID for an Anki note.
+    
+        Args:
+            particle_id: Unique identifier for the particle.
+            template_version: Version of the card template.
+            model_version: Version of the Anki note model.
+    
+        Returns:
+            A deterministic lowercase ASCII hex string.
+        """
+>       raise NotImplementedError("stable_note_guid is not implemented")
+E       NotImplementedError: stable_note_guid is not implemented
+
+src/hadron_anki/deck/ids.py:13: NotImplementedError
+_________________________ test_stable_note_guid_format _________________________
+
+    def test_stable_note_guid_format():
+>       guid = stable_note_guid("proton", "1.0.0", "v1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_deck_apkg.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+particle_id = 'proton', template_version = '1.0.0', model_version = 'v1'
+
+    def stable_note_guid(particle_id: str, template_version: str, model_version: str) -> str:
+        """
+        Generate a deterministic ID for an Anki note.
+    
+        Args:
+            particle_id: Unique identifier for the particle.
+            template_version: Version of the card template.
+            model_version: Version of the Anki note model.
+    
+        Returns:
+            A deterministic lowercase ASCII hex string.
+        """
+>       raise NotImplementedError("stable_note_guid is not implemented")
+E       NotImplementedError: stable_note_guid is not implemented
+
+src/hadron_anki/deck/ids.py:13: NotImplementedError
+______________________ test_stable_note_guid_sensitivity _______________________
+
+    def test_stable_note_guid_sensitivity():
+        base_args = ["proton", "1.0.0", "v1"]
+>       base_guid = stable_note_guid(*base_args)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_deck_apkg.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+particle_id = 'proton', template_version = '1.0.0', model_version = 'v1'
+
+    def stable_note_guid(particle_id: str, template_version: str, model_version: str) -> str:
+        """
+        Generate a deterministic ID for an Anki note.
+    
+        Args:
+            particle_id: Unique identifier for the particle.
+            template_version: Version of the card template.
+            model_version: Version of the Anki note model.
+    
+        Returns:
+            A deterministic lowercase ASCII hex string.
+        """
+>       raise NotImplementedError("stable_note_guid is not implemented")
+E       NotImplementedError: stable_note_guid is not implemented
+
+src/hadron_anki/deck/ids.py:13: NotImplementedError
+___________________________ test_build_apkg_contract ___________________________
+
+catalog_min = {'particles': [{'aliases': ['p'], 'id': 'proton', 'name': 'Proton', 'quarks': ['u', 'u', 'd'], ...}, {'aliases': ['n']...s': ['u', 'd', 'd'], ...}, {'aliases': ['pi+'], 'id': 'pi_plus', 'name': 'Pion Plus', 'quarks': ['u', 'anti-d'], ...}]}
+
+    def test_build_apkg_contract(catalog_min):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            out_path = os.path.join(tmpdir, "test.apkg")
+>           build_apkg(catalog_min, out_path, "1.0.0", "v1")
+
+tests/test_deck_apkg.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+catalog = {'particles': [{'aliases': ['p'], 'id': 'proton', 'name': 'Proton', 'quarks': ['u', 'u', 'd'], ...}, {'aliases': ['n']...s': ['u', 'd', 'd'], ...}, {'aliases': ['pi+'], 'id': 'pi_plus', 'name': 'Pion Plus', 'quarks': ['u', 'anti-d'], ...}]}
+out_path = '/tmp/tmpimu_vvug/test.apkg', template_version = '1.0.0'
+model_version = 'v1'
+
+    def build_apkg(catalog: dict, out_path: str, template_version: str, model_version: str) -> None:
+        """
+        Build an Anki .apkg file from a particle catalog.
+    
+        Args:
+            catalog: Dictionary containing particle data.
+            out_path: Destination path for the .apkg file.
+            template_version: Version of the card template.
+            model_version: Version of the Anki note model.
+        """
+>       raise NotImplementedError("build_apkg is not implemented")
+E       NotImplementedError: build_apkg is not implemented
+
+src/hadron_anki/deck/apkg.py:11: NotImplementedError
+=========================== short test summary info ============================
+FAILED tests/test_deck_apkg.py::test_stable_note_guid_is_deterministic - NotI...
+FAILED tests/test_deck_apkg.py::test_stable_note_guid_format - NotImplemented...
+FAILED tests/test_deck_apkg.py::test_stable_note_guid_sensitivity - NotImplem...
+FAILED tests/test_deck_apkg.py::test_build_apkg_contract - NotImplementedErro...
+4 failed in 0.87s

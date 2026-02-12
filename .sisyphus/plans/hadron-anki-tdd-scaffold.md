@@ -231,7 +231,7 @@ Critical Path: Task 1 -> (Tasks 3-6) -> final verification
     Evidence: .sisyphus/evidence/task-2-yaml-print.txt
   ```
 
-- [ ] 3. Define templates contract tests + stub API
+- [x] 3. Define templates contract tests + stub API
 
   **What to do**:
   - Create `tests/test_templates.py` specifying:
@@ -270,7 +270,7 @@ Critical Path: Task 1 -> (Tasks 3-6) -> final verification
     Evidence: .sisyphus/evidence/task-3-pytest-templates.txt
   ```
 
-- [ ] 4. Define SVG renderer contract tests + stub API
+- [x] 4. Define SVG renderer contract tests + stub API
 
   **What to do**:
   - Create `tests/test_renderer_svg.py` specifying:
@@ -311,7 +311,7 @@ Critical Path: Task 1 -> (Tasks 3-6) -> final verification
     Evidence: .sisyphus/evidence/task-4-pytest-svg.txt
   ```
 
-- [ ] 5. Define quark normalization/validation contract tests + stub API
+- [x] 5. Define quark normalization/validation contract tests + stub API
 
   **What to do**:
   - Create `tests/test_composer.py` specifying contracts for:
@@ -355,7 +355,7 @@ Critical Path: Task 1 -> (Tasks 3-6) -> final verification
     Evidence: .sisyphus/evidence/task-5-pytest-composer.txt
   ```
 
-- [ ] 6. Define deterministic ID + APKG contract tests + stub API
+- [x] 6. Define deterministic ID + APKG contract tests + stub API
 
   **What to do**:
   - Create `tests/test_deck_apkg.py` specifying contracts for:
