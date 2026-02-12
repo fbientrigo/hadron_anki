@@ -44,8 +44,37 @@ def test_svg_includes_expected_labels():
 
 def test_svg_deterministic_hash_for_fixed_input():
     spec = ParticleSpec(id="p", name="proton", type="baryon", quarks=["u", "u", "d"])
-    output = render_svg(spec)
+    style = {
+        "flavors": {
+            "u": "#FF0000",
+            "d": "#0000FF"
+        }
+    }
+    output = render_svg(spec, style=style)
     h = hashlib.sha256(output.encode()).hexdigest()
-    # Placeholder hash - will fail initially
-    expected_hash = "66eaac60a74e1df4b5df8d9ef9b870aeb23a579eb360b1da77ab38cd5e03fe57"
+    expected_hash = "8584d404fa9a68e578d3e642f8d65918005a509a8fced6c42c169e3b10bf8624"
     assert h == expected_hash
+
+def test_svg_applies_fill_colors_from_config():
+    spec = ParticleSpec(id="p", name="proton", type="baryon", quarks=["u", "u", "d"])
+    style = {
+        "flavors": {
+            "u": "#FF0000",
+            "d": "#0000FF"
+        }
+    }
+    output = render_svg(spec, style=style)
+    assert 'fill="#FF0000"' in output
+    assert 'fill="#0000FF"' in output
+
+def test_antiquark_has_dashed_stroke_and_flavor_color():
+    spec = ParticleSpec(id="pi+", name="pion", type="meson", quarks=["u", "anti-d"])
+    style = {
+        "flavors": {
+            "u": "#FF0000",
+            "d": "#0000FF"
+        }
+    }
+    output = render_svg(spec, style=style)
+    assert 'fill="#0000FF"' in output
+    assert 'stroke-dasharray' in output

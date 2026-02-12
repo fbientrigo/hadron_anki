@@ -1,0 +1,37 @@
+{
+    // Hadron Anki Style Configuration
+    // Supports JSONC (JSON with comments)
+    
+    "palette": {
+        // Core flavor colors
+        "flavors": {
+            "u": "#ff5555", // up
+            "d": "#5555ff", // down
+            "s": "#55ff55", // strange
+            "c": "#ffff55", // charm
+            "b": "#ff55ff", // bottom
+            "t": "#55ffff"  // top
+        },
+        "defaults": {
+            "unknown": "#999999"
+        }
+    },
+
+    // Specific flavor overrides if needed
+    "flavors": {
+        // "u": { "base": "#ff0000" }
+    },
+
+    // Connector style (lines between nodes)
+    "connector": {
+        "stroke": "#666666",
+        "stroke-width": "2"
+    },
+
+    // Label style (text for nodes)
+    "label": {
+        "font-family": "Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+        "font-size": "12",
+        "text-anchor": "middle"
+    }
+}
