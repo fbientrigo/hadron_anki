@@ -1,5 +1,0 @@
-genanki
-pyyaml
-
-[dev]
-pytest
