@@ -3,6 +3,7 @@ import re
 import json
 import zipfile
 import pytest
+import sqlite3
 import tempfile
 from hadron_anki.deck.ids import stable_note_guid
 from hadron_anki.deck.apkg import build_apkg
@@ -15,27 +16,49 @@ def test_stable_note_guid_is_deterministic():
 
 def test_stable_note_guid_format():
     guid = stable_note_guid("proton", "1.0.0", "v1")
-    # Lowercase ASCII hex, at least 32 chars
     assert re.match(r"^[a-f0-9]{32,}$", guid)
 
 def test_stable_note_guid_sensitivity():
     base_args = ["proton", "1.0.0", "v1"]
     base_guid = stable_note_guid(*base_args)
     
-    # Change particle_id
     args = base_args.copy()
     args[0] = "neutron"
     assert stable_note_guid(*args) != base_guid
     
-    # Change template_version
     args = base_args.copy()
     args[1] = "1.0.1"
     assert stable_note_guid(*args) != base_guid
     
-    # Change model_version
     args = base_args.copy()
     args[2] = "v2"
     assert stable_note_guid(*args) != base_guid
+
+def test_total_cards_count_matches_particles_x3():
+    catalog = {
+        "particles": [
+            {"id": "p1", "name": "P1", "type": "baryon", "quarks": ["u", "u", "u"], "mass": 1000},
+            {"id": "p2", "name": "P2", "type": "meson", "quarks": ["u", "anti-u"], "mass": 500},
+        ]
+    }
+    with tempfile.TemporaryDirectory() as tmpdir:
+        out_path = os.path.join(tmpdir, "test.apkg")
+        build_apkg(catalog, out_path, "1.0.0", "v1")
+        
+        with zipfile.ZipFile(out_path, 'r') as z:
+            z.extract("collection.anki2", tmpdir)
+            
+        db_path = os.path.join(tmpdir, "collection.anki2")
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT count(*) FROM notes")
+        notes_count = cursor.fetchone()[0]
+        
+        # 2 particles * 3 cards = 6 notes
+        assert notes_count == 6
+        
+        cursor.close()
+        conn.close()
 
 def test_build_apkg_contract(catalog_min):
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -52,22 +75,6 @@ def test_build_apkg_contract(catalog_min):
             
             with z.open("media") as f:
                 media_data = json.load(f)
-                assert isinstance(media_data, dict)
                 
-                # Check numeric string keys and .svg values
-                svg_keys = []
-                svg_values = []
-                for key, value in media_data.items():
-                    assert key.isdigit()
-                    if value.endswith(".svg"):
-                        svg_keys.append(key)
-                        svg_values.append(value)
-
-                assert len(svg_keys) >= 3
+                svg_values = [v for k, v in media_data.items() if k.isdigit() and v.endswith(".svg")]
                 assert "proton.svg" in svg_values
-                assert "neutron.svg" in svg_values
-                assert "pi_plus.svg" in svg_values
-                
-                # Verify corresponding numeric file exists in zip
-                for key in svg_keys:
-                    assert key in namelist

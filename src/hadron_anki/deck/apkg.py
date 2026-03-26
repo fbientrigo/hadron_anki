@@ -7,7 +7,7 @@ import zipfile
 import genanki
 
 from hadron_anki.cards.styles import CARD_CSS
-from hadron_anki.cards.templates import back_html, front_html
+from hadron_anki.cards.mapping import generate_cards
 from hadron_anki.deck.ids import stable_note_guid
 from hadron_anki.domain.composer import normalize_quark_token, validate_quark_count
 from hadron_anki.domain.spec import ParticleSpec
@@ -116,12 +116,14 @@ def build_apkg(catalog: dict[str, Any], out_path: str, template_version: str, mo
                 f.write(render_svg(spec))
             media_files.append(svg_path)
 
-            note = genanki.Note(
-                model=model,
-                fields=[front_html(svg_filename), back_html(spec)],
-                guid=stable_note_guid(spec.id, template_version, model_version),
-            )
-            deck.add_note(note)
+            cards = generate_cards(spec, svg_filename)
+            for card in cards:
+                note = genanki.Note(
+                    model=model,
+                    fields=[card.front_html, card.back_html],
+                    guid=stable_note_guid(f"{spec.id}:{card.card_type}", template_version, model_version),
+                )
+                deck.add_note(note)
 
         media_files.sort(key=lambda p: os.path.basename(p))
 
