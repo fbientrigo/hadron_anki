@@ -31,3 +31,11 @@ def validate_quark_count(spec: ParticleSpec) -> None:
         raise ValueError("baryon must have 3 quarks")
     if spec.type == "meson" and len(spec.quarks) != 2:
         raise ValueError("meson must have 2 quarks")
+
+def format_quark_display(token: str) -> str:
+    """
+    Formats a quark token for display, converting 'anti-x' to 'x̄' (combining overline).
+    """
+    if token.startswith("anti-"):
+        return token[5:] + "\u0304"
+    return token

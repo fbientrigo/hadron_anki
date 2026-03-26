@@ -1,6 +1,6 @@
 import pytest
 from hadron_anki.domain.spec import ParticleSpec
-from hadron_anki.domain.composer import normalize_quark_token, validate_quark_count
+from hadron_anki.domain.composer import normalize_quark_token, validate_quark_count, format_quark_display
 
 def test_normalize_quark_token_canonicalizes_antiquarks():
     """canonical antiquark token uses anti- prefix"""
@@ -30,10 +30,11 @@ def test_validate_quark_count_meson_must_have_2_quarks():
         validate_quark_count(spec)
 
 def test_validate_quark_count_valid_specs():
-    """Valid specs -> no exception"""
-    proton = ParticleSpec(id="p", name="proton", type="baryon", quarks=["u", "u", "d"])
-    pion = ParticleSpec(id="pi_plus", name="pi+", type="meson", quarks=["u", "anti-d"])
-    
     # Should not raise
-    validate_quark_count(proton)
-    validate_quark_count(pion)
+    validate_quark_count(ParticleSpec(id="p", name="proton", type="baryon", quarks=["u", "u", "d"]))
+    validate_quark_count(ParticleSpec(id="pi", name="pion", type="meson", quarks=["u", "d"]))
+
+def test_format_quark_display_uses_overline_for_antiquarks():
+    assert format_quark_display("u") == "u"
+    assert format_quark_display("anti-d") == "d\u0304"
+    assert format_quark_display("anti-s") == "s\u0304"

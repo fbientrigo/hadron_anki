@@ -40,7 +40,7 @@ def test_svg_includes_expected_labels():
     spec = ParticleSpec(id="pi-", name="pion minus", type="meson", quarks=["d", "anti-u"])
     output = render_svg(spec)
     assert "d" in output
-    assert "anti-u" in output
+    assert "u\u0304" in output
 
 def test_svg_deterministic_hash_for_fixed_input():
     spec = ParticleSpec(id="p", name="proton", type="baryon", quarks=["u", "u", "d"])

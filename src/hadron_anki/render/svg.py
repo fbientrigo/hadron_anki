@@ -1,5 +1,6 @@
 from typing import Any
 from hadron_anki.domain.spec import ParticleSpec
+from hadron_anki.domain.composer import format_quark_display
 from hadron_anki.render.config import load_style_config, node_svg_attrs, DEFAULT_STYLE
 
 def _escape_text(text: str) -> str:
@@ -29,7 +30,7 @@ def _render_meson(quarks: list[str], style: dict[str, Any]) -> str:
         node_style = node_svg_attrs(q, style)
         nodes.append(f'<circle {_attr({"cx": cx, "cy": cy, "r": 20, **node_style})}/>')
         nodes.append(
-            f'<text {_attr({**style.get("label", DEFAULT_STYLE["label"]), "x": cx, "y": cy + 5})}>{_escape_text(q)}</text>'
+            f'<text {_attr({**style.get("label", DEFAULT_STYLE["label"]), "x": cx, "y": cy + 5})}>{_escape_text(format_quark_display(q))}</text>'
         )
 
     return path + "".join(nodes)
@@ -52,7 +53,7 @@ def _render_baryon(quarks: list[str], style: dict[str, Any]) -> str:
         node_style = node_svg_attrs(q, style)
         nodes.append(f'<circle {_attr({"cx": cx, "cy": cy, "r": 20, **node_style})}/>')
         nodes.append(
-            f'<text {_attr({**style.get("label", DEFAULT_STYLE["label"]), "x": cx, "y": cy + 5})}>{_escape_text(q)}</text>'
+            f'<text {_attr({**style.get("label", DEFAULT_STYLE["label"]), "x": cx, "y": cy + 5})}>{_escape_text(format_quark_display(q))}</text>'
         )
 
     return "".join(lines) + "".join(nodes)
@@ -69,7 +70,7 @@ def render_svg(spec: ParticleSpec, style: dict[str, Any] | None = None) -> str:
         body = _render_baryon(spec.quarks, style)
     else:
         title = f"{spec.name} ({spec.id})"
-        quarks = " ".join(spec.quarks)
+        quarks = " ".join(format_quark_display(q) for q in spec.quarks)
         body = (
             f'<rect {_attr({"fill": "white", "height": 120, "stroke": "black", "width": 400, "x": 0, "y": 0})}/>'
             f'<text {_attr({"font-family": "monospace", "font-size": "16", "x": 12, "y": 28})}>{_escape_text(title)}</text>'
