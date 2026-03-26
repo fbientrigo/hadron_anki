@@ -12,22 +12,24 @@ CARD_CSS: str = """\
 .card-shell {
     max-width: 420px;
     margin: 0 auto;
-    padding: 32px 24px;
+    padding: 36px 28px;
     font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
     color: #2d2a26;
     background: #faf8f5;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(45, 42, 38, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(45, 42, 38, 0.05);
     line-height: 1.5;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 16px;
+    min-height: 200px;
 }
 
 .title {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 700;
     color: #2d2a26;
     letter-spacing: -0.01em;
@@ -39,19 +41,21 @@ CARD_CSS: str = """\
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    padding: 3px 12px;
+    padding: 4px 14px;
     border-radius: 100px;
     color: #ffffff;
+    margin-bottom: 4px;
 }
 .badge.baryon { background: #4a7c59; }
 .badge.meson { background: #7c5a4a; }
 
 .prompt {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
-    color: #6b6560;
-    letter-spacing: 0.02em;
+    color: #8a837c;
+    letter-spacing: 0.03em;
     font-style: italic;
+    opacity: 0.9;
 }
 
 .answer {
@@ -61,29 +65,38 @@ CARD_CSS: str = """\
 }
 
 .media-wrap {
-    padding: 12px;
+    padding: 16px;
     background: #ffffff;
     border: 1.5px solid #e8e4df;
-    border-radius: 10px;
+    border-radius: 12px;
+    max-width: 280px;
+    width: 100%;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(45, 42, 38, 0.04);
 }
 .media-wrap img {
     display: block;
+    margin: 0 auto;
     max-width: 100%;
     height: auto;
 }
 
 .quark-text {
-    font-size: 22px;
-    letter-spacing: 0.12em;
+    font-size: 20px;
+    font-weight: 500;
+    color: #4a4642;
+    letter-spacing: 0.1em;
     font-family: "Georgia", "Times New Roman", serif;
 }
 
 .mass-value {
-    color: #2d2a26;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1f1d1a;
     background: #ffffff;
-    padding: 8px 16px;
-    border: 1.5px solid #e8e4df;
-    border-radius: 8px;
+    padding: 12px 24px;
+    border: 2px solid #e8e4df;
+    border-radius: 12px;
     font-family: "SF Mono", "Fira Code", "Consolas", monospace;
 }
 
@@ -91,15 +104,15 @@ CARD_CSS: str = """\
     font-size: 13px;
     color: #9a9590;
     font-family: "SF Mono", "Consolas", monospace;
-    margin-top: 8px;
+    opacity: 0.8;
 }
 
 /* ── Anki Default Override ── */
 
 hr#answer {
     border: none;
-    border-top: 1px dashed #e8e4df;
-    margin: 20px 0;
+    border-top: 1px dashed #dcd8d3;
+    margin: 24px 0;
     width: 60%;
 }
 """
