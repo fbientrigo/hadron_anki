@@ -1,0 +1,61 @@
+particles:
+  - id: proton
+    name: Proton
+    type: baryon
+    quarks: [u, u, d]
+  - id: neutron
+    name: Neutron
+    type: baryon
+    quarks: [u, d, d]
+  - id: pi_plus
+    name: Pion Plus
+    type: meson
+    quarks: [u, anti-d]
+  - id: pi_minus
+    name: Pion Minus
+    type: meson
+    quarks: [d, anti-u]
+  - id: pi_zero
+    name: Pion Zero
+    type: meson
+    quarks: [u, anti-u]
+  - id: k_plus
+    name: Kaon Plus
+    type: meson
+    quarks: [u, anti-s]
+  - id: k_minus
+    name: Kaon Minus
+    type: meson
+    quarks: [s, anti-u]
+  - id: k_zero
+    name: Kaon Zero
+    type: meson
+    quarks: [d, anti-s]
+  - id: lambda_0
+    name: Lambda
+    type: baryon
+    quarks: [u, d, s]
+  - id: sigma_plus
+    name: Sigma Plus
+    type: baryon
+    quarks: [u, u, s]
+  - id: sigma_zero
+    name: Sigma Zero
+    type: baryon
+    quarks: [u, d, s]
+  - id: sigma_minus
+    name: Sigma Minus
+    type: baryon
+    quarks: [d, d, s]
+  - id: xi_zero
+    name: Xi Zero
+    type: baryon
+    quarks: [u, s, s]
+  - id: xi_minus
+    name: Xi Minus
+    type: baryon
+    quarks: [d, s, s]
+  - id: omega_minus
+    name: Omega Minus
+    type: baryon
+    quarks: [s, s, s]
