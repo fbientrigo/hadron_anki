@@ -6,6 +6,7 @@ import zipfile
 
 import genanki
 
+from hadron_anki.cards.styles import CARD_CSS
 from hadron_anki.cards.templates import back_html, front_html
 from hadron_anki.deck.ids import stable_note_guid
 from hadron_anki.domain.composer import normalize_quark_token, validate_quark_count
@@ -52,6 +53,10 @@ def _particle_spec_from_mapping(p: dict[str, Any]) -> ParticleSpec:
         name=name,
         type=typ,
         quarks=[normalize_quark_token(q) for q in quarks],
+        symbol=p.get("symbol"),
+        pdg_id=p.get("pdg_id"),
+        aliases=p.get("aliases"),
+        mass=p.get("mass"),
     )
     validate_quark_count(spec)
     return spec
@@ -94,9 +99,10 @@ def build_apkg(catalog: dict[str, Any], out_path: str, template_version: str, mo
             {
                 "name": "Card 1",
                 "qfmt": "{{Front}}",
-                "afmt": "{{Front}}<hr id=answer>{{Back}}",
+                "afmt": "{{FrontSide}}<hr id=answer>{{Back}}",
             }
         ],
+        css=CARD_CSS,
     )
 
     deck = genanki.Deck(deck_id=deck_id, name=f"hadron_anki::{template_version}")

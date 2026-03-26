@@ -11,12 +11,17 @@ requires-python = ">=3.11"
 dependencies = [
     "genanki",
     "pyyaml",
+    "particle",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest",
 ]
+
+[tool.pytest.ini_options]
+tmp_path_retention_policy = "none"
+addopts = "--basetemp=.tmp"
 
 [tool.setuptools.packages.find]
 where = ["src"]

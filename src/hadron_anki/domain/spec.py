@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 @dataclass
 class ParticleSpec:
@@ -6,3 +7,7 @@ class ParticleSpec:
     name: str
     type: str
     quarks: list[str]
+    symbol: Optional[str] = None
+    pdg_id: Optional[int] = None
+    aliases: Optional[list[str]] = None
+    mass: Optional[float] = None
