@@ -1,9 +1,13 @@
-import sys
-
+import os
 from hadron_anki.catalog.loader import load_catalog
 from hadron_anki.catalog.bootstrap_particle import enrich_particle_metadata
 from hadron_anki.deck.apkg import build_apkg
 from hadron_anki.preview.generator import generate_preview
+
+# --- CONFIGURATION ---
+# Options: "mass", "composition", "identity"
+# Set to None for all types.
+CARD_TYPES = ["composition", "identity", "mass"] 
 
 def main():
     catalog_path = "catalogs/core_particles.yaml"
@@ -47,13 +51,19 @@ def main():
     
     # 3. Build Deck
     print(f"Building deck ({len(enriched_particles)} particles) to {out_apkg}...")
-    build_apkg(catalog, out_apkg, template_version="2.0.0", model_version="v2")
+    build_apkg(
+        catalog, 
+        out_apkg, 
+        template_version="2.0.0", 
+        model_version="v2",
+        card_types=CARD_TYPES
+    )
     
     # 4. Generate visual HTML preview
     from hadron_anki.deck.apkg import _particle_spec_from_mapping
     specs = [_particle_spec_from_mapping(p) for p in enriched_particles]
     print(f"Generating HTML preview gallery to {preview_dir}...")
-    generate_preview(specs, preview_dir)
+    generate_preview(specs, preview_dir, card_types=CARD_TYPES)
     
     print("Done. Import hadron_core.apkg into Anki to verify.")
 

@@ -12,25 +12,32 @@ def render_card_shell(content: str, card_side: str, card_type: str) -> str:
     """Renders the shared base shell for all cards."""
     return f'<div class="card-shell {card_side} {card_type}-layout">\n{content}\n</div>'
 
-def render_mass_front(display_name: str) -> str:
+def _render_title_row(display_name: str, spec: ParticleSpec) -> str:
+    name_str = f'<span class="title-name">{display_name}</span>'
+    if spec and spec.symbol_tex:
+        tex_str = f'<span class="title-tex">\\( {spec.symbol_tex} \\)</span>'
+        return f'<div class="title-row">\n  {name_str}\n  {tex_str}\n</div>'
+    return f'<div class="title-row">\n  {name_str}\n</div>'
+
+def render_mass_front(display_name: str, spec: ParticleSpec) -> str:
     content = (
-        f'<div class="title">{display_name}</div>\n'
-        f'<div class="prompt">What is the mass?</div>'
+        f'<div class="prompt">What is the mass of...</div>\n'
+        f'{_render_title_row(display_name, spec)}'
     )
     return render_card_shell(content, "front", "mass")
 
-def render_mass_back(spec: ParticleSpec) -> str:
+def render_mass_back(spec: ParticleSpec, display_name: str) -> str:
     content = (
-        f'<div class="title">{spec.name}</div>\n'
+        f'{_render_title_row(display_name, spec)}\n'
         f'<div class="badge {spec.type}">{spec.type}</div>\n'
         f'<div class="answer mass-value">{spec.mass} MeV</div>'
     )
     return render_card_shell(content, "back", "mass")
 
-def render_composition_front(display_name: str) -> str:
+def render_composition_front(display_name: str, spec: ParticleSpec) -> str:
     content = (
-        f'<div class="title">{display_name}</div>\n'
-        f'<div class="prompt">What is its quark composition?</div>'
+        f'<div class="prompt">What is the quark composition of...</div>\n'
+        f'{_render_title_row(display_name, spec)}'
     )
     return render_card_shell(content, "front", "composition")
 
@@ -46,14 +53,14 @@ def render_composition_back(spec: ParticleSpec, svg_filename: str) -> str:
 def render_identity_front(spec: ParticleSpec) -> str:
     quarks_display = " ".join(format_quark_display(q) for q in spec.quarks)
     content = (
-        f'<div class="prompt quark-text">{quarks_display}</div>\n'
-        f'<div class="prompt">Which particle is this?</div>'
+        f'<div class="prompt">Identify this particle:</div>\n'
+        f'<div class="quark-text large-quarks">{quarks_display}</div>'
     )
     return render_card_shell(content, "front", "identity")
 
 def render_identity_back(spec: ParticleSpec, display_name: str) -> str:
     content = (
-        f'<div class="title">{spec.name}</div>\n'
+        f'{_render_title_row(display_name, spec)}\n'
         f'<div class="badge {spec.type}">{spec.type}</div>\n'
         f'<div class="answer">{display_name}</div>'
     )

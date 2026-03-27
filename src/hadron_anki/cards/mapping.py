@@ -11,27 +11,34 @@ class CardSpec:
     back_html: str
     media: Optional[str] = None
 
-def generate_cards(spec: ParticleSpec, svg_filename: str) -> list[CardSpec]:
+def generate_cards(spec: ParticleSpec, svg_filename: str, include_types: Optional[list[str]] = None) -> list[CardSpec]:
     """
     Transforms a ParticleSpec into a list of learning cards.
+    Valid include_types: 'mass', 'composition', 'identity'.
+    If None, all applicable cards are generated.
     """
     cards = []
     display_name = spec.symbol if spec.symbol else spec.name
+    
+    def should_include(card_type):
+        return include_types is None or card_type in include_types
 
     # 1) MASS CARD
-    if spec.mass is not None:
-        mass_front = templates.render_mass_front(display_name)
-        mass_back = templates.render_mass_back(spec)
+    if spec.mass is not None and should_include("mass"):
+        mass_front = templates.render_mass_front(display_name, spec)
+        mass_back = templates.render_mass_back(spec, display_name)
         cards.append(CardSpec("mass", mass_front, mass_back))
 
     # 2) COMPOSITION CARD
-    comp_front = templates.render_composition_front(display_name)
-    comp_back = templates.render_composition_back(spec, svg_filename)
-    cards.append(CardSpec("composition", comp_front, comp_back, media=svg_filename))
+    if should_include("composition"):
+        comp_front = templates.render_composition_front(display_name, spec)
+        comp_back = templates.render_composition_back(spec, svg_filename)
+        cards.append(CardSpec("composition", comp_front, comp_back, media=svg_filename))
 
     # 3) IDENTITY CARD
-    id_front = templates.render_identity_front(spec)
-    id_back = templates.render_identity_back(spec, display_name)
-    cards.append(CardSpec("identity", id_front, id_back))
+    if should_include("identity"):
+        id_front = templates.render_identity_front(spec)
+        id_back = templates.render_identity_back(spec, display_name)
+        cards.append(CardSpec("identity", id_front, id_back))
 
     return cards

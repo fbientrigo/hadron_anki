@@ -35,6 +35,26 @@ CARD_CSS: str = """\
     letter-spacing: -0.01em;
 }
 
+.title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 12px;
+}
+
+.title-name {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d2a26;
+    letter-spacing: -0.01em;
+}
+
+.title-tex {
+    font-size: 24px;
+    color: #4a4642;
+    opacity: 0.9;
+}
+
 .badge {
     display: inline-block;
     font-size: 11px;
@@ -50,12 +70,13 @@ CARD_CSS: str = """\
 .badge.meson { background: #7c5a4a; }
 
 .prompt {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
-    color: #8a837c;
-    letter-spacing: 0.03em;
+    color: #9a9590;
+    letter-spacing: 0.04em;
     font-style: italic;
-    opacity: 0.9;
+    opacity: 0.85;
+    margin-bottom: 4px;
 }
 
 .answer {
@@ -67,44 +88,54 @@ CARD_CSS: str = """\
 .media-wrap {
     padding: 16px;
     background: #ffffff;
-    border: 1.5px solid #e8e4df;
+    border: 1px solid #e8e4df;
     border-radius: 12px;
-    max-width: 280px;
     width: 100%;
+    max-width: 320px;
+    box-sizing: border-box;
     margin: 0 auto;
-    box-shadow: 0 4px 12px rgba(45, 42, 38, 0.04);
+    box-shadow: 0 2px 8px rgba(45, 42, 38, 0.04);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .media-wrap img {
     display: block;
-    margin: 0 auto;
     max-width: 100%;
     height: auto;
+    object-fit: contain;
 }
 
 .quark-text {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
-    color: #4a4642;
-    letter-spacing: 0.1em;
+    color: #6b6560;
+    letter-spacing: 0.12em;
     font-family: "Georgia", "Times New Roman", serif;
 }
 
+.large-quarks {
+    font-size: 36px;
+    color: #2d2a26;
+    letter-spacing: 0.15em;
+    margin: 12px 0;
+}
+
 .mass-value {
-    font-size: 32px;
-    font-weight: 700;
-    color: #1f1d1a;
-    background: #ffffff;
-    padding: 12px 24px;
-    border: 2px solid #e8e4df;
-    border-radius: 12px;
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 48px;
+    font-weight: 800;
+    color: #2d2a26;
+    letter-spacing: -0.02em;
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+    margin: 8px 0;
 }
 
 .meta {
-    font-size: 13px;
-    color: #9a9590;
+    font-size: 12px;
+    color: #a39f9a;
     font-family: "SF Mono", "Consolas", monospace;
-    opacity: 0.8;
+    opacity: 0.7;
+    margin-top: 12px;
 }
 
 /* ── Anki Default Override ── */

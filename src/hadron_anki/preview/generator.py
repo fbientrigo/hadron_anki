@@ -9,6 +9,7 @@ from hadron_anki.cards.styles import CARD_CSS
 from hadron_anki.cards.mapping import generate_cards
 from hadron_anki.domain.spec import ParticleSpec
 from hadron_anki.render.svg import render_svg
+from typing import Optional
 
 
 _PREVIEW_CSS = """\
@@ -59,7 +60,7 @@ h1 {
 """
 
 
-def generate_preview(specs: list[ParticleSpec], output_dir: str | Path) -> None:
+def generate_preview(specs: list[ParticleSpec], output_dir: str | Path, card_types: Optional[list[str]] = None) -> None:
     """Generates SVG files and a styled preview gallery."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -78,7 +79,7 @@ def generate_preview(specs: list[ParticleSpec], output_dir: str | Path) -> None:
         svg_filename = f"{spec.id}.svg"
         
         # We also need an SVG available locally for preview rendering
-        cards = generate_cards(spec, svg_filename)
+        cards = generate_cards(spec, svg_filename, include_types=card_types)
         for card in cards:
             front = card.front_html
             back = card.back_html

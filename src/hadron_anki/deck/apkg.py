@@ -1,7 +1,7 @@
 import hashlib
 import os
 import tempfile
-from typing import Any
+from typing import Any, Optional
 import zipfile
 
 import genanki
@@ -12,6 +12,7 @@ from hadron_anki.deck.ids import stable_note_guid
 from hadron_anki.domain.composer import normalize_quark_token, validate_quark_count
 from hadron_anki.domain.spec import ParticleSpec
 from hadron_anki.render.svg import render_svg
+from hadron_anki.cards.tags import build_tags
 
 
 _DETERMINISTIC_ZIP_DT = (1980, 1, 1, 0, 0, 0)
@@ -54,6 +55,7 @@ def _particle_spec_from_mapping(p: dict[str, Any]) -> ParticleSpec:
         type=typ,
         quarks=[normalize_quark_token(q) for q in quarks],
         symbol=p.get("symbol"),
+        symbol_tex=p.get("symbol_tex"),
         pdg_id=p.get("pdg_id"),
         aliases=p.get("aliases"),
         mass=p.get("mass"),
@@ -62,7 +64,13 @@ def _particle_spec_from_mapping(p: dict[str, Any]) -> ParticleSpec:
     return spec
 
 
-def build_apkg(catalog: dict[str, Any], out_path: str, template_version: str, model_version: str) -> None:
+def build_apkg(
+    catalog: dict[str, Any], 
+    out_path: str, 
+    template_version: str, 
+    model_version: str,
+    card_types: Optional[list[str]] = None
+) -> None:
     """
     Build an Anki .apkg file from a particle catalog.
     
@@ -71,6 +79,7 @@ def build_apkg(catalog: dict[str, Any], out_path: str, template_version: str, mo
         out_path: Destination path for the .apkg file.
         template_version: Version of the card template.
         model_version: Version of the Anki note model.
+        card_types: List of card types to include. If None, all are generated.
     """
     particles_any = catalog.get("particles")
     if not isinstance(particles_any, list) or not particles_any:
@@ -116,12 +125,13 @@ def build_apkg(catalog: dict[str, Any], out_path: str, template_version: str, mo
                 f.write(render_svg(spec))
             media_files.append(svg_path)
 
-            cards = generate_cards(spec, svg_filename)
+            cards = generate_cards(spec, svg_filename, include_types=card_types)
             for card in cards:
                 note = genanki.Note(
                     model=model,
                     fields=[card.front_html, card.back_html],
                     guid=stable_note_guid(f"{spec.id}:{card.card_type}", template_version, model_version),
+                    tags=build_tags(spec, card.card_type)
                 )
                 deck.add_note(note)
 

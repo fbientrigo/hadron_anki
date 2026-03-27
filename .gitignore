@@ -15,7 +15,10 @@ ENV/
 
 .idea/
 .vscode/
+.sisyphus/
 
 # Preview outputs
 _preview_out/
 temp_preview/
+.tmp/
+_test_output.txt
