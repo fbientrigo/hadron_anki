@@ -29,13 +29,22 @@ h1 {
     margin-bottom: 28px;
     letter-spacing: -0.01em;
 }
+h2 {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #4a4642;
+    margin: 40px 0 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
 .gallery {
     display: flex;
     flex-wrap: wrap;
     gap: 24px;
     justify-content: center;
     max-width: 960px;
-    margin: 0 auto;
+    margin: 0 auto 40px auto;
 }
 .card-pair {
     display: flex;
@@ -61,37 +70,47 @@ h1 {
 
 
 def generate_preview(specs: list[ParticleSpec], output_dir: str | Path, card_types: Optional[list[str]] = None) -> None:
-    """Generates SVG files and a styled preview gallery."""
+    """Generates SVG files and a styled preview gallery grouped by semantic card subsets."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
     sorted_specs = sorted(specs, key=lambda s: s.id)
+    sections = ["mass", "composition", "identity"]
 
-    # Write SVG files
-    for spec in sorted_specs:
-        svg_content = render_svg(spec)
-        svg_filename = f"{spec.id}.svg"
-        (output_path / svg_filename).write_text(svg_content, encoding="utf-8")
+    # Write SVG files into semantic subdirectories
+    for section in sections:
+        if card_types is not None and section not in card_types:
+            continue
+        section_dir = output_path / section
+        section_dir.mkdir(exist_ok=True)
+        for spec in sorted_specs:
+            svg_content = render_svg(spec)
+            (section_dir / f"{spec.id}.svg").write_text(svg_content, encoding="utf-8")
 
-    # Build card pairs HTML
-    card_pairs: list[str] = []
-    for spec in sorted_specs:
-        svg_filename = f"{spec.id}.svg"
+    # Build card pairs HTML grouped by section
+    grouped_html: list[str] = []
+    
+    for section in sections:
+        if card_types is not None and section not in card_types:
+            continue
+            
+        grouped_html.append(f"<h2>{section.capitalize()} Cards</h2>")
+        grouped_html.append('<div class="gallery">')
         
-        # We also need an SVG available locally for preview rendering
-        cards = generate_cards(spec, svg_filename, include_types=card_types)
-        for card in cards:
-            front = card.front_html
-            back = card.back_html
-            # Add a small text telling what type of card it is
-            card_pairs.append(
-                '<div class="card-pair">'
-                f'<div class="side-label">Front: {card.card_type}</div>'
-                f'<div class="card-frame">{front}</div>'
-                f'<div class="side-label">Back: {card.card_type}</div>'
-                f'<div class="card-frame">{back}</div>'
-                '</div>'
-            )
+        for spec in sorted_specs:
+            cards = generate_cards(spec, f"{section}/{spec.id}.svg", include_types=[section])
+            for card in cards:
+                front = card.front_html
+                back = card.back_html
+                grouped_html.append(
+                    '<div class="card-pair">'
+                    f'<div class="side-label">Front: {card.card_type}</div>'
+                    f'<div class="card-frame">{front}</div>'
+                    f'<div class="side-label">Back: {card.card_type}</div>'
+                    f'<div class="card-frame">{back}</div>'
+                    '</div>'
+                )
+        grouped_html.append("</div>")
 
     index_content = (
         "<!DOCTYPE html>\n"
@@ -103,10 +122,8 @@ def generate_preview(specs: list[ParticleSpec], output_dir: str | Path, card_typ
         "</head>\n"
         "<body>\n"
         "<h1>Hadron Anki — Card Preview</h1>\n"
-        '<div class="gallery">\n'
-        + "\n".join(card_pairs) +
-        "\n</div>\n"
-        "</body>\n"
+        + "\n".join(grouped_html) +
+        "\n</body>\n"
         "</html>"
     )
     (output_path / "index.html").write_text(index_content, encoding="utf-8")
