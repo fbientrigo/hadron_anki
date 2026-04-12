@@ -1,0 +1,197 @@
+schema_version: 1
+particles:
+  - id: proton
+    exact:
+      name: Proton
+      symbol: p
+      hadron_type: baryon
+      family: nucleon
+      multiplet: baryon_octet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - quark: u
+            role: quark
+          - quark: u
+            role: quark
+          - quark: d
+            role: quark
+      mass_mev_exact: 938.272088
+      quantum_numbers:
+        jp: "1/2+"
+        isospin_i: "1/2"
+        isospin_i3: "+1/2"
+        charge: 1
+        strangeness: 0
+        charm: 0
+        bottomness: 0
+    pedagogical:
+      mass_display: "938 MeV"
+      mass_bucket: intermediate
+      mass_rank_in_family: 1
+      diagram_mode: simple_triplet
+      display_quark_summary: "u u d"
+
+  - id: neutron
+    exact:
+      name: Neutron
+      symbol: n
+      hadron_type: baryon
+      family: nucleon
+      multiplet: baryon_octet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - quark: u
+            role: quark
+          - quark: d
+            role: quark
+          - quark: d
+            role: quark
+      mass_mev_exact: 939.565420
+      quantum_numbers:
+        jp: "1/2+"
+        isospin_i: "1/2"
+        isospin_i3: "-1/2"
+        charge: 0
+        strangeness: 0
+        charm: 0
+        bottomness: 0
+    pedagogical:
+      mass_display: "940 MeV"
+      mass_bucket: intermediate
+      mass_rank_in_family: 2
+      diagram_mode: simple_triplet
+      display_quark_summary: "u d d"
+
+  - id: pi_plus
+    exact:
+      name: Pion Plus
+      symbol: "pi+"
+      hadron_type: meson
+      family: pion
+      multiplet: pseudoscalar_nonet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - quark: u
+            role: quark
+          - quark: d
+            role: antiquark
+      mass_mev_exact: 139.57039
+      quantum_numbers:
+        jp: "0-"
+        isospin_i: "1"
+        isospin_i3: "+1"
+        charge: 1
+        strangeness: 0
+        charm: 0
+        bottomness: 0
+    pedagogical:
+      mass_display: "140 MeV"
+      mass_bucket: ultralight
+      mass_rank_in_family: 2
+      diagram_mode: simple_pair
+      display_quark_summary: "u anti-d"
+
+  - id: pi0
+    exact:
+      name: Pion Zero
+      symbol: "pi0"
+      hadron_type: meson
+      family: pion
+      multiplet: pseudoscalar_nonet
+      quark_model:
+        mode: flavor_superposition
+        basis: quark_antiquark_flavor
+        terms:
+          - coefficient:
+              sign: 1
+              kind: sqrt_fraction
+              numerator: 1
+              denominator: 2
+              decimal: 0.70710678
+            pair:
+              quark: u
+              antiquark: u
+          - coefficient:
+              sign: -1
+              kind: sqrt_fraction
+              numerator: 1
+              denominator: 2
+              decimal: -0.70710678
+            pair:
+              quark: d
+              antiquark: d
+        normalized: true
+        latex: "\\frac{u\\bar{u} - d\\bar{d}}{\\sqrt{2}}"
+      mass_mev_exact: 134.9768
+      quantum_numbers:
+        jp: "0-"
+        isospin_i: "1"
+        isospin_i3: "0"
+        charge: 0
+        strangeness: 0
+        charm: 0
+        bottomness: 0
+    pedagogical:
+      mass_display: "135 MeV"
+      mass_bucket: ultralight
+      mass_rank_in_family: 1
+      diagram_mode: flavor_superposition
+      display_quark_summary: "(u ubar - d dbar)/sqrt(2)"
+
+  - id: eta8
+    exact:
+      name: Eta Octet Basis State
+      symbol: eta8
+      hadron_type: meson
+      family: eta_basis
+      multiplet: pseudoscalar_nonet
+      quark_model:
+        mode: flavor_superposition
+        basis: quark_antiquark_flavor
+        terms:
+          - coefficient:
+              sign: 1
+              kind: sqrt_fraction
+              numerator: 1
+              denominator: 6
+              decimal: 0.40824829
+            pair:
+              quark: u
+              antiquark: u
+          - coefficient:
+              sign: 1
+              kind: sqrt_fraction
+              numerator: 1
+              denominator: 6
+              decimal: 0.40824829
+            pair:
+              quark: d
+              antiquark: d
+          - coefficient:
+              sign: -1
+              kind: sqrt_fraction
+              numerator: 2
+              denominator: 3
+              decimal: -0.81649658
+            pair:
+              quark: s
+              antiquark: s
+        normalized: true
+        latex: "\\frac{u\\bar{u} + d\\bar{d} - 2s\\bar{s}}{\\sqrt{6}}"
+      mass_mev_exact: 547.862
+      quantum_numbers:
+        jp: "0-"
+        isospin_i: "0"
+        isospin_i3: "0"
+        charge: 0
+        strangeness: 0
+        charm: 0
+        bottomness: 0
+    pedagogical:
+      mass_display: "548 MeV"
+      mass_bucket: light
+      diagram_mode: flavor_superposition
+      display_quark_summary: "(u ubar + d dbar - 2 s sbar)/sqrt(6)"
