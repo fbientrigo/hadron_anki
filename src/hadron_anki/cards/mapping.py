@@ -11,10 +11,15 @@ class CardSpec:
     back_html: str
     media: Optional[str] = None
 
-def generate_cards(spec: ParticleSpec, svg_filename: str, include_types: Optional[list[str]] = None) -> list[CardSpec]:
+def generate_cards(
+    spec: ParticleSpec, 
+    svg_filename: str, 
+    include_types: Optional[list[str]] = None,
+    decay_svg_filename: Optional[str] = None
+) -> list[CardSpec]:
     """
     Transforms a ParticleSpec into a list of learning cards.
-    Valid include_types: 'mass', 'composition', 'identity'.
+    Valid include_types: 'mass', 'composition', 'identity', 'decay'.
     If None, all applicable cards are generated.
     """
     cards = []
@@ -40,5 +45,11 @@ def generate_cards(spec: ParticleSpec, svg_filename: str, include_types: Optiona
         id_front = templates.render_identity_front(spec)
         id_back = templates.render_identity_back(spec, display_name)
         cards.append(CardSpec("identity", id_front, id_back))
+
+    # 4) DECAY CARD
+    if spec.decay_diagram and decay_svg_filename and should_include("decay"):
+        decay_front = templates.render_decay_front(display_name, spec)
+        decay_back = templates.render_decay_back(spec, display_name, decay_svg_filename)
+        cards.append(CardSpec("decay", decay_front, decay_back, media=decay_svg_filename))
 
     return cards

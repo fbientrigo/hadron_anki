@@ -3,59 +3,98 @@ particles:
     name: Proton
     type: baryon
     quarks: [u, u, d]
+    symbol_tex: "p"
   - id: neutron
     name: Neutron
     type: baryon
     quarks: [u, d, d]
+    symbol_tex: "n"
+    decay_label: "n → p + e⁻ + ν̄ₑ"
+    decay_diagram:
+      nodes:
+        - {id: "n", x: 50,  y: 90}
+        - {id: "v1", x: 160, y: 90}
+        - {id: "p",  x: 270, y: 45}
+        - {id: "e",  x: 270, y: 90}
+        - {id: "nu", x: 270, y: 135}
+      edges:
+        - {from: "n",  to: "v1",  type: "scalar",  label_tex: "n"}
+        - {from: "v1", to: "p",   type: "fermion", label_tex: "p"}
+        - {from: "v1", to: "e",   type: "boson",   label_tex: "W^-"}
+        - {from: "v1", to: "nu",  type: "fermion", label_tex: "\\bar{\\nu}_e"}
   - id: pi_plus
     name: Pion Plus
     type: meson
     quarks: [u, anti-d]
+    symbol_tex: "\\pi^+"
+    decay_label: "π⁺ → μ⁺ + ν_μ"
+    decay_diagram:
+      nodes:
+        - {id: "in",   x: 50,  y: 90}
+        - {id: "v1",   x: 160, y: 90}
+        - {id: "out1", x: 270, y: 45}
+        - {id: "out2", x: 270, y: 135}
+      edges:
+        - {from: "in",  to: "v1",   type: "scalar",  label_tex: "\\pi^+"}
+        - {from: "v1",  to: "out1", type: "fermion", label_tex: "\\mu^+"}
+        - {from: "v1",  to: "out2", type: "fermion", label_tex: "\\nu_\\mu"}
   - id: pi_minus
     name: Pion Minus
     type: meson
     quarks: [d, anti-u]
+    symbol_tex: "\\pi^-"
   - id: pi_zero
     name: Pion Zero
     type: meson
     quarks: [u, anti-u]
+    symbol_tex: "\\pi^0"
   - id: k_plus
     name: Kaon Plus
     type: meson
     quarks: [u, anti-s]
+    symbol_tex: "K^+"
   - id: k_minus
     name: Kaon Minus
     type: meson
     quarks: [s, anti-u]
+    symbol_tex: "K^-"
   - id: k_zero
     name: Kaon Zero
     type: meson
     quarks: [d, anti-s]
+    symbol_tex: "K^0"
   - id: lambda_0
-    name: Lambda
+    name: Lambda Zero
     type: baryon
     quarks: [u, d, s]
+    symbol_tex: "\\Lambda^0"
   - id: sigma_plus
     name: Sigma Plus
     type: baryon
     quarks: [u, u, s]
+    symbol_tex: "\\Sigma^+"
   - id: sigma_zero
     name: Sigma Zero
     type: baryon
     quarks: [u, d, s]
+    symbol_tex: "\\Sigma^0"
   - id: sigma_minus
     name: Sigma Minus
     type: baryon
     quarks: [d, d, s]
+    symbol_tex: "\\Sigma^-"
   - id: xi_zero
     name: Xi Zero
     type: baryon
     quarks: [u, s, s]
+    symbol_tex: "\\Xi^0"
   - id: xi_minus
     name: Xi Minus
     type: baryon
     quarks: [d, s, s]
+    symbol_tex: "\\Xi^-"
   - id: omega_minus
     name: Omega Minus
     type: baryon
     quarks: [s, s, s]
+    symbol_tex: "\\Omega^-"

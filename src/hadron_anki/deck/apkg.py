@@ -59,6 +59,8 @@ def _particle_spec_from_mapping(p: dict[str, Any]) -> ParticleSpec:
         pdg_id=p.get("pdg_id"),
         aliases=p.get("aliases"),
         mass=p.get("mass"),
+        decay_diagram=p.get("decay_diagram"),
+        decay_label=p.get("decay_label"),
     )
     validate_quark_count(spec)
     return spec
@@ -67,6 +69,7 @@ def _particle_spec_from_mapping(p: dict[str, Any]) -> ParticleSpec:
 def build_apkg(
     catalog: dict[str, Any], 
     out_path: str, 
+    deck_name: str,
     template_version: str, 
     model_version: str,
     card_types: Optional[list[str]] = None
@@ -77,6 +80,7 @@ def build_apkg(
     Args:
         catalog: Dictionary containing particle data.
         out_path: Destination path for the .apkg file.
+        deck_name: Name of the deck inside Anki (use '::' for subdecks).
         template_version: Version of the card template.
         model_version: Version of the Anki note model.
         card_types: List of card types to include. If None, all are generated.
@@ -95,9 +99,11 @@ def build_apkg(
     # Deterministic integer IDs (genanki expects int; Anki uses signed 64-bit).
     def _stable_int_id(tag: str) -> int:
         digest = hashlib.sha256(tag.encode("utf-8")).digest()
-        return int.from_bytes(digest[:8], "big") & ((1 << 63) - 1)
+        # Cap at 52 bits to stay within Number.MAX_SAFE_INTEGER in Anki's JS bridge.
+        # 2^53-1 is the limit; 2^52-1 is extremely safe.
+        return int.from_bytes(digest[:8], "big") & ((1 << 52) - 1)
 
-    deck_id = _stable_int_id(f"deck|hadron_anki|{template_version}|{model_version}")
+    deck_id = _stable_int_id(f"deck|{deck_name}|{template_version}")
     model_id = _stable_int_id(f"model|hadron_anki|{template_version}|{model_version}")
 
     model = genanki.Model(
@@ -114,7 +120,7 @@ def build_apkg(
         css=CARD_CSS,
     )
 
-    deck = genanki.Deck(deck_id=deck_id, name=f"hadron_anki::{template_version}")
+    deck = genanki.Deck(deck_id=deck_id, name=deck_name)
 
     media_files: list[str] = []
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -125,7 +131,24 @@ def build_apkg(
                 f.write(render_svg(spec))
             media_files.append(svg_path)
 
-            cards = generate_cards(spec, svg_filename, include_types=card_types)
+            decay_svg_filename = None
+            if spec.decay_diagram:
+                from hadron_anki.render.feynman import render_feynman_svg
+                math_cache = os.path.join(tmpdir, "math_labels")
+                os.makedirs(math_cache, exist_ok=True)
+                decay_svg_filename = f"{spec.id}_decay.svg"
+                decay_svg_path = os.path.join(tmpdir, decay_svg_filename)
+                
+                with open(decay_svg_path, "w", encoding="utf-8") as df:
+                    df.write(render_feynman_svg(spec.decay_diagram, math_cache_dir=math_cache))
+                media_files.append(decay_svg_path)
+
+            cards = generate_cards(
+                spec, 
+                svg_filename, 
+                include_types=card_types, 
+                decay_svg_filename=decay_svg_filename
+            )
             for card in cards:
                 note = genanki.Note(
                     model=model,

@@ -65,3 +65,19 @@ def render_identity_back(spec: ParticleSpec, display_name: str) -> str:
         f'<div class="answer">{display_name}</div>'
     )
     return render_card_shell(content, "back", "identity")
+
+def render_decay_front(display_name: str, spec: ParticleSpec) -> str:
+    content = (
+        f'<div class="prompt">What are the primary decay modes of...</div>\n'
+        f'{_render_title_row(display_name, spec)}'
+    )
+    return render_card_shell(content, "front", "decay")
+
+def render_decay_back(spec: ParticleSpec, display_name: str, decay_svg_filename: str) -> str:
+    decay_label_str = f'<div class="meta">{spec.decay_label}</div>' if spec.decay_label else ""
+    content = (
+        f'{_render_title_row(display_name, spec)}\n'
+        f'<div class="media-wrap" style="max-height: 250px;">\n<img src="{decay_svg_filename}" alt="Feynman Decay Diagram" />\n</div>\n'
+        f'{decay_label_str}'
+    )
+    return render_card_shell(content, "back", "decay")

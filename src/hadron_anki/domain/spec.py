@@ -12,4 +12,6 @@ class ParticleSpec:
     pdg_id: Optional[int] = None
     aliases: Optional[list[str]] = None
     mass: Optional[float] = None
+    decay_diagram: Optional[dict] = None
+    decay_label: Optional[str] = None
 

@@ -96,3 +96,39 @@ def test_preview_deterministic_structure(tmp_path):
 
     assert (out1 / "index.html").read_text(encoding="utf-8") == (out2 / "index.html").read_text(encoding="utf-8")
     assert (out1 / "mass" / "p1.svg").read_text(encoding="utf-8") == (out2 / "mass" / "p1.svg").read_text(encoding="utf-8")
+
+
+def test_preview_generates_feynman_svgs(tmp_path):
+    """Feynman preview creates subdir and SVG files."""
+    from hadron_anki.preview.generator import generate_feynman_preview
+
+    feynman_specs = [
+        {
+            "id": "pi_plus_decay",
+            "label": "pi+ decay",
+            "decay_diagram": {
+                "nodes": [
+                    {"id": "in",   "x": 50,  "y": 90},
+                    {"id": "v1",   "x": 160, "y": 90},
+                    {"id": "out1", "x": 270, "y": 45},
+                    {"id": "out2", "x": 270, "y": 135},
+                ],
+                "edges": [
+                    {"from": "in",  "to": "v1",   "type": "scalar",  "label": "pi+"},
+                    {"from": "v1",  "to": "out1",  "type": "fermion", "label": "mu+"},
+                    {"from": "v1",  "to": "out2",  "type": "fermion", "label": "nu_mu"},
+                ],
+            },
+        }
+    ]
+
+    out = tmp_path / "preview"
+    generate_feynman_preview(feynman_specs, out)
+
+    assert (out / "feynman").is_dir()
+    svg_file = out / "feynman" / "pi_plus_decay.svg"
+    assert svg_file.exists()
+    svg_content = svg_file.read_text(encoding="utf-8")
+    assert "<svg" in svg_content
+    assert "<circle" in svg_content   # vertices
+

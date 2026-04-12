@@ -9,7 +9,8 @@ from hadron_anki.cards.styles import CARD_CSS
 from hadron_anki.cards.mapping import generate_cards
 from hadron_anki.domain.spec import ParticleSpec
 from hadron_anki.render.svg import render_svg
-from typing import Optional
+from hadron_anki.render.feynman import render_feynman_svg
+from typing import Any, Optional
 
 
 _PREVIEW_CSS = """\
@@ -69,7 +70,12 @@ h2 {
 """
 
 
-def generate_preview(specs: list[ParticleSpec], output_dir: str | Path, card_types: Optional[list[str]] = None) -> None:
+def generate_preview(
+    specs: list[ParticleSpec], 
+    output_dir: str | Path, 
+    card_types: Optional[list[str]] = None,
+    feynman_html: Optional[list[str]] = None
+) -> None:
     """Generates SVG files and a styled preview gallery grouped by semantic card subsets."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -112,12 +118,17 @@ def generate_preview(specs: list[ParticleSpec], output_dir: str | Path, card_typ
                 )
         grouped_html.append("</div>")
 
+    if feynman_html:
+        grouped_html.extend(feynman_html)
+
     index_content = (
         "<!DOCTYPE html>\n"
         "<html>\n"
         "<head>\n"
         "<meta charset=\"utf-8\">\n"
         "<title>Hadron Anki Preview</title>\n"
+        "<script src=\"https://polyfill.io/v3/polyfill.min.js?features=es6\"></script>\n"
+        "<script id=\"MathJax-script\" async src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"></script>\n"
         f"<style>\n{CARD_CSS}\n{_PREVIEW_CSS}\n</style>\n"
         "</head>\n"
         "<body>\n"
@@ -127,3 +138,46 @@ def generate_preview(specs: list[ParticleSpec], output_dir: str | Path, card_typ
         "</html>"
     )
     (output_path / "index.html").write_text(index_content, encoding="utf-8")
+
+
+def generate_feynman_preview(
+    feynman_specs: list[dict[str, Any]],
+    output_dir: str | Path,
+) -> list[str]:
+    """
+    Renders Feynman diagram SVGs into output_dir/feynman/{id}.svg.
+    Also returns grouped HTML snippet for index.html integration.
+
+    Each entry in feynman_specs must have:
+        id: str
+        label: str          (human-readable particle / process name)
+        decay_diagram: dict  (nodes + edges schema)
+    """
+    output_path = Path(output_dir)
+    feynman_dir = output_path / "feynman"
+    feynman_dir.mkdir(parents=True, exist_ok=True)
+
+    feynman_sorted = sorted(feynman_specs, key=lambda s: s["id"])
+
+    section_html: list[str] = []
+    section_html.append("<h2>Feynman Diagrams</h2>")
+    section_html.append('<div class="gallery">')
+
+    for spec in feynman_sorted:
+        diagram_spec = spec.get("decay_diagram", {})
+        svg_content = render_feynman_svg(diagram_spec, math_cache_dir=feynman_dir)
+        fname = f"{spec['id']}.svg"
+        (feynman_dir / fname).write_text(svg_content, encoding="utf-8")
+
+        label = spec.get("label", spec["id"])
+        section_html.append(
+            f'<div class="card-pair">'
+            f'<div class="side-label">{label}</div>'
+            f'<div class="card-frame"><img src="feynman/{fname}" '
+            f'style="width:100%;height:auto;"/></div>'
+            f'</div>'
+        )
+
+    section_html.append("</div>")
+    return section_html
+
