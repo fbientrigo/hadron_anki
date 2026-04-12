@@ -1,0 +1,28 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\Asus\Documents\FisicoFabi\hadron_anki\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\Asus\Documents\FisicoFabi\hadron_anki
+configfile: pyproject.toml
+collecting ... collected 19 items
+
+tests/test_decay_bootstrap.py::test_decay_bootstrap_handles_stable_particle PASSED [  5%]
+tests/test_decay_bootstrap.py::test_proton_is_stable PASSED              [ 10%]
+tests/test_decay_bootstrap.py::test_pion_is_not_stable PASSED            [ 15%]
+tests/test_decay_bootstrap.py::test_neutron_is_not_stable PASSED         [ 21%]
+tests/test_decay_bootstrap.py::test_sigma_zero_treated_as_unstable PASSED [ 26%]
+tests/test_decay_bootstrap.py::test_decay_bootstrap_extracts_main_decay_for_pi_plus PASSED [ 31%]
+tests/test_decay_bootstrap.py::test_decay_bootstrap_extracts_main_decay_for_neutron PASSED [ 36%]
+tests/test_decay_bootstrap.py::test_dominant_decay_selects_highest_bf PASSED [ 42%]
+tests/test_decay_bootstrap.py::test_stable_particle_returns_none_decay PASSED [ 47%]
+tests/test_decay_bootstrap.py::test_decay_children_are_normalized_to_repo_ids PASSED [ 52%]
+tests/test_decay_bootstrap.py::test_normalize_pdg_name_pi_plus PASSED    [ 57%]
+tests/test_decay_bootstrap.py::test_normalize_pdg_name_antiparticle PASSED [ 63%]
+tests/test_decay_bootstrap.py::test_normalize_pdg_name_proton PASSED     [ 68%]
+tests/test_decay_bootstrap.py::test_normalize_pdg_name_neutron PASSED    [ 73%]
+tests/test_decay_bootstrap.py::test_normalize_pdg_name_mu_plus PASSED    [ 78%]
+tests/test_decay_bootstrap.py::test_normalize_pdg_name_mu_minus PASSED   [ 84%]
+tests/test_decay_bootstrap.py::test_normalize_pdg_name_lambda PASSED     [ 89%]
+tests/test_decay_bootstrap.py::test_normalize_pdg_name_gamma PASSED      [ 94%]
+tests/test_decay_bootstrap.py::test_decay_record_has_source_fields PASSED [100%]
+
+============================= 19 passed in 0.22s ==============================
