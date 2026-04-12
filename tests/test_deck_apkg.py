@@ -43,7 +43,13 @@ def test_total_cards_count_matches_particles_x3():
     }
     with tempfile.TemporaryDirectory() as tmpdir:
         out_path = os.path.join(tmpdir, "test.apkg")
-        build_apkg(catalog, out_path, "1.0.0", "v1")
+        build_apkg(
+            catalog=catalog,
+            out_path=out_path,
+            deck_name="test_deck",
+            template_version="1.0.0",
+            model_version="v1",
+        )
         
         with zipfile.ZipFile(out_path, 'r') as z:
             z.extract("collection.anki2", tmpdir)
@@ -63,7 +69,13 @@ def test_total_cards_count_matches_particles_x3():
 def test_build_apkg_contract(catalog_min):
     with tempfile.TemporaryDirectory() as tmpdir:
         out_path = os.path.join(tmpdir, "test.apkg")
-        build_apkg(catalog_min, out_path, "1.0.0", "v1")
+        build_apkg(
+            catalog=catalog_min,
+            out_path=out_path,
+            deck_name="test_deck",
+            template_version="1.0.0",
+            model_version="v1",
+        )
         
         assert os.path.exists(out_path)
         assert zipfile.is_zipfile(out_path)
