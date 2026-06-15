@@ -1,0 +1,441 @@
+# core_particles.canonical.yaml
+# Canonical particle catalog (schema_version 1) for the core hadrons.
+# Validated by hadron_anki.domain.canonical_validator.
+#
+# - exact:        physics truth (quark model, mass, quantum numbers, multiplet/octet).
+# - symbol_tex:   LaTeX symbol for MathJax rendering on cards.
+# - decay_diagram: OPTIONAL hand-authored Feynman diagram. When present it overrides
+#                  the auto-generated one (used for weak decays so the W boson shows).
+#
+# Branching ratios / decay products live in core_decays.yaml (keyed by id).
+
+schema_version: 1
+particles:
+  # ── Baryon octet (J^P = 1/2+) ────────────────────────────────────────────
+  - id: proton
+    exact:
+      name: Proton
+      symbol: "p"
+      symbol_tex: "p"
+      hadron_type: baryon
+      family: nucleon
+      multiplet: baryon_octet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: u, role: quark}
+          - {quark: u, role: quark}
+          - {quark: d, role: quark}
+      mass_mev_exact: 938.272088
+      quantum_numbers:
+        jp: "1/2+"
+        isospin_i: "1/2"
+        isospin_i3: "+1/2"
+        charge: 1
+        strangeness: 0
+        charm: 0
+        bottomness: 0
+
+  - id: neutron
+    exact:
+      name: Neutron
+      symbol: "n"
+      symbol_tex: "n"
+      hadron_type: baryon
+      family: nucleon
+      multiplet: baryon_octet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: u, role: quark}
+          - {quark: d, role: quark}
+          - {quark: d, role: quark}
+      mass_mev_exact: 939.565420
+      quantum_numbers:
+        jp: "1/2+"
+        isospin_i: "1/2"
+        isospin_i3: "-1/2"
+        charge: 0
+        strangeness: 0
+        charm: 0
+        bottomness: 0
+    # Beta decay through a W- boson: n -> p + W-(-> e- nubar_e)
+    decay_diagram:
+      nodes:
+        - {id: "in",     x: 40,  y: 90}
+        - {id: "v1",     x: 130, y: 70}
+        - {id: "out_p",  x: 290, y: 40}
+        - {id: "v2",     x: 195, y: 120}
+        - {id: "out_e",  x: 290, y: 110}
+        - {id: "out_nu", x: 290, y: 150}
+      edges:
+        - {from: "in",  to: "v1",     type: "fermion", label_tex: "n"}
+        - {from: "v1",  to: "out_p",  type: "fermion", label_tex: "p"}
+        - {from: "v1",  to: "v2",     type: "boson",   label_tex: "W^-"}
+        - {from: "v2",  to: "out_e",  type: "fermion", label_tex: "e^-"}
+        - {from: "v2",  to: "out_nu", type: "fermion", label_tex: "\\bar{\\nu}_e"}
+
+  - id: lambda_0
+    exact:
+      name: Lambda Zero
+      symbol: "Λ⁰"
+      symbol_tex: "\\Lambda^0"
+      hadron_type: baryon
+      family: lambda
+      multiplet: baryon_octet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: u, role: quark}
+          - {quark: d, role: quark}
+          - {quark: s, role: quark}
+      mass_mev_exact: 1115.683
+      quantum_numbers:
+        jp: "1/2+"
+        isospin_i: "0"
+        isospin_i3: "0"
+        charge: 0
+        strangeness: -1
+        charm: 0
+        bottomness: 0
+
+  - id: sigma_plus
+    exact:
+      name: Sigma Plus
+      symbol: "Σ⁺"
+      symbol_tex: "\\Sigma^+"
+      hadron_type: baryon
+      family: sigma
+      multiplet: baryon_octet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: u, role: quark}
+          - {quark: u, role: quark}
+          - {quark: s, role: quark}
+      mass_mev_exact: 1189.37
+      quantum_numbers:
+        jp: "1/2+"
+        isospin_i: "1"
+        isospin_i3: "+1"
+        charge: 1
+        strangeness: -1
+        charm: 0
+        bottomness: 0
+
+  - id: sigma_zero
+    exact:
+      name: Sigma Zero
+      symbol: "Σ⁰"
+      symbol_tex: "\\Sigma^0"
+      hadron_type: baryon
+      family: sigma
+      multiplet: baryon_octet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: u, role: quark}
+          - {quark: d, role: quark}
+          - {quark: s, role: quark}
+      mass_mev_exact: 1192.642
+      quantum_numbers:
+        jp: "1/2+"
+        isospin_i: "1"
+        isospin_i3: "0"
+        charge: 0
+        strangeness: -1
+        charm: 0
+        bottomness: 0
+
+  - id: sigma_minus
+    exact:
+      name: Sigma Minus
+      symbol: "Σ⁻"
+      symbol_tex: "\\Sigma^-"
+      hadron_type: baryon
+      family: sigma
+      multiplet: baryon_octet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: d, role: quark}
+          - {quark: d, role: quark}
+          - {quark: s, role: quark}
+      mass_mev_exact: 1197.449
+      quantum_numbers:
+        jp: "1/2+"
+        isospin_i: "1"
+        isospin_i3: "-1"
+        charge: -1
+        strangeness: -1
+        charm: 0
+        bottomness: 0
+
+  - id: xi_zero
+    exact:
+      name: Xi Zero
+      symbol: "Ξ⁰"
+      symbol_tex: "\\Xi^0"
+      hadron_type: baryon
+      family: xi
+      multiplet: baryon_octet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: u, role: quark}
+          - {quark: s, role: quark}
+          - {quark: s, role: quark}
+      mass_mev_exact: 1314.86
+      quantum_numbers:
+        jp: "1/2+"
+        isospin_i: "1/2"
+        isospin_i3: "+1/2"
+        charge: 0
+        strangeness: -2
+        charm: 0
+        bottomness: 0
+
+  - id: xi_minus
+    exact:
+      name: Xi Minus
+      symbol: "Ξ⁻"
+      symbol_tex: "\\Xi^-"
+      hadron_type: baryon
+      family: xi
+      multiplet: baryon_octet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: d, role: quark}
+          - {quark: s, role: quark}
+          - {quark: s, role: quark}
+      mass_mev_exact: 1321.71
+      quantum_numbers:
+        jp: "1/2+"
+        isospin_i: "1/2"
+        isospin_i3: "-1/2"
+        charge: -1
+        strangeness: -2
+        charm: 0
+        bottomness: 0
+
+  # ── Baryon decuplet (J^P = 3/2+) ─────────────────────────────────────────
+  - id: omega_minus
+    exact:
+      name: Omega Minus
+      symbol: "Ω⁻"
+      symbol_tex: "\\Omega^-"
+      hadron_type: baryon
+      family: omega
+      multiplet: baryon_decuplet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: s, role: quark}
+          - {quark: s, role: quark}
+          - {quark: s, role: quark}
+      mass_mev_exact: 1672.45
+      quantum_numbers:
+        jp: "3/2+"
+        isospin_i: "0"
+        isospin_i3: "0"
+        charge: -1
+        strangeness: -3
+        charm: 0
+        bottomness: 0
+
+  # ── Pseudoscalar nonet (J^P = 0-) ────────────────────────────────────────
+  - id: pi_plus
+    exact:
+      name: Pion Plus
+      symbol: "π⁺"
+      symbol_tex: "\\pi^+"
+      hadron_type: meson
+      family: pion
+      multiplet: pseudoscalar_nonet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: u, role: quark}
+          - {quark: d, role: antiquark}
+      mass_mev_exact: 139.57039
+      quantum_numbers:
+        jp: "0-"
+        isospin_i: "1"
+        isospin_i3: "+1"
+        charge: 1
+        strangeness: 0
+        charm: 0
+        bottomness: 0
+    # Leptonic decay through a W+ boson: pi+ -> W+(-> mu+ nu_mu)
+    decay_diagram:
+      nodes:
+        - {id: "in",   x: 40,  y: 90}
+        - {id: "v1",   x: 120, y: 90}
+        - {id: "v2",   x: 210, y: 90}
+        - {id: "out1", x: 290, y: 55}
+        - {id: "out2", x: 290, y: 125}
+      edges:
+        - {from: "in", to: "v1",   type: "scalar",  label_tex: "\\pi^+"}
+        - {from: "v1", to: "v2",   type: "boson",   label_tex: "W^+"}
+        - {from: "v2", to: "out1", type: "fermion", label_tex: "\\mu^+"}
+        - {from: "v2", to: "out2", type: "fermion", label_tex: "\\nu_\\mu"}
+
+  - id: pi_minus
+    exact:
+      name: Pion Minus
+      symbol: "π⁻"
+      symbol_tex: "\\pi^-"
+      hadron_type: meson
+      family: pion
+      multiplet: pseudoscalar_nonet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: d, role: quark}
+          - {quark: u, role: antiquark}
+      mass_mev_exact: 139.57039
+      quantum_numbers:
+        jp: "0-"
+        isospin_i: "1"
+        isospin_i3: "-1"
+        charge: -1
+        strangeness: 0
+        charm: 0
+        bottomness: 0
+    # Leptonic decay through a W- boson: pi- -> W-(-> mu- nubar_mu)
+    decay_diagram:
+      nodes:
+        - {id: "in",   x: 40,  y: 90}
+        - {id: "v1",   x: 120, y: 90}
+        - {id: "v2",   x: 210, y: 90}
+        - {id: "out1", x: 290, y: 55}
+        - {id: "out2", x: 290, y: 125}
+      edges:
+        - {from: "in", to: "v1",   type: "scalar",  label_tex: "\\pi^-"}
+        - {from: "v1", to: "v2",   type: "boson",   label_tex: "W^-"}
+        - {from: "v2", to: "out1", type: "fermion", label_tex: "\\mu^-"}
+        - {from: "v2", to: "out2", type: "fermion", label_tex: "\\bar{\\nu}_\\mu"}
+
+  - id: pi_zero
+    exact:
+      name: Pion Zero
+      symbol: "π⁰"
+      symbol_tex: "\\pi^0"
+      hadron_type: meson
+      family: pion
+      multiplet: pseudoscalar_nonet
+      quark_model:
+        mode: flavor_superposition
+        basis: quark_antiquark_flavor
+        terms:
+          - coefficient: {sign: 1, kind: sqrt_fraction, numerator: 1, denominator: 2, decimal: 0.70710678}
+            pair: {quark: u, antiquark: u}
+          - coefficient: {sign: -1, kind: sqrt_fraction, numerator: 1, denominator: 2, decimal: -0.70710678}
+            pair: {quark: d, antiquark: d}
+        normalized: true
+        latex: "\\frac{u\\bar{u} - d\\bar{d}}{\\sqrt{2}}"
+      mass_mev_exact: 134.9768
+      quantum_numbers:
+        jp: "0-"
+        isospin_i: "1"
+        isospin_i3: "0"
+        charge: 0
+        strangeness: 0
+        charm: 0
+        bottomness: 0
+
+  - id: k_plus
+    exact:
+      name: Kaon Plus
+      symbol: "K⁺"
+      symbol_tex: "K^+"
+      hadron_type: meson
+      family: kaon
+      multiplet: pseudoscalar_nonet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: u, role: quark}
+          - {quark: s, role: antiquark}
+      mass_mev_exact: 493.677
+      quantum_numbers:
+        jp: "0-"
+        isospin_i: "1/2"
+        isospin_i3: "+1/2"
+        charge: 1
+        strangeness: 1
+        charm: 0
+        bottomness: 0
+    # Leptonic decay through a W+ boson: K+ -> W+(-> mu+ nu_mu)
+    decay_diagram:
+      nodes:
+        - {id: "in",   x: 40,  y: 90}
+        - {id: "v1",   x: 120, y: 90}
+        - {id: "v2",   x: 210, y: 90}
+        - {id: "out1", x: 290, y: 55}
+        - {id: "out2", x: 290, y: 125}
+      edges:
+        - {from: "in", to: "v1",   type: "scalar",  label_tex: "K^+"}
+        - {from: "v1", to: "v2",   type: "boson",   label_tex: "W^+"}
+        - {from: "v2", to: "out1", type: "fermion", label_tex: "\\mu^+"}
+        - {from: "v2", to: "out2", type: "fermion", label_tex: "\\nu_\\mu"}
+
+  - id: k_minus
+    exact:
+      name: Kaon Minus
+      symbol: "K⁻"
+      symbol_tex: "K^-"
+      hadron_type: meson
+      family: kaon
+      multiplet: pseudoscalar_nonet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: s, role: quark}
+          - {quark: u, role: antiquark}
+      mass_mev_exact: 493.677
+      quantum_numbers:
+        jp: "0-"
+        isospin_i: "1/2"
+        isospin_i3: "-1/2"
+        charge: -1
+        strangeness: -1
+        charm: 0
+        bottomness: 0
+    # Leptonic decay through a W- boson: K- -> W-(-> mu- nubar_mu)
+    decay_diagram:
+      nodes:
+        - {id: "in",   x: 40,  y: 90}
+        - {id: "v1",   x: 120, y: 90}
+        - {id: "v2",   x: 210, y: 90}
+        - {id: "out1", x: 290, y: 55}
+        - {id: "out2", x: 290, y: 125}
+      edges:
+        - {from: "in", to: "v1",   type: "scalar",  label_tex: "K^-"}
+        - {from: "v1", to: "v2",   type: "boson",   label_tex: "W^-"}
+        - {from: "v2", to: "out1", type: "fermion", label_tex: "\\mu^-"}
+        - {from: "v2", to: "out2", type: "fermion", label_tex: "\\bar{\\nu}_\\mu"}
+
+  - id: k_zero
+    exact:
+      name: Kaon Zero
+      symbol: "K⁰"
+      symbol_tex: "K^0"
+      hadron_type: meson
+      family: kaon
+      multiplet: pseudoscalar_nonet
+      quark_model:
+        mode: simple_valence
+        constituents:
+          - {quark: d, role: quark}
+          - {quark: s, role: antiquark}
+      mass_mev_exact: 497.611
+      quantum_numbers:
+        jp: "0-"
+        isospin_i: "1/2"
+        isospin_i3: "-1/2"
+        charge: 0
+        strangeness: 1
+        charm: 0
+        bottomness: 0

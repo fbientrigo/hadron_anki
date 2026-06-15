@@ -52,4 +52,10 @@ def generate_cards(
         decay_back = templates.render_decay_back(spec, display_name, decay_svg_filename)
         cards.append(CardSpec("decay", decay_front, decay_back, media=decay_svg_filename))
 
+    # 5) SUMMARY CARD (opt-in only: never part of the default card set)
+    if include_types is not None and "summary" in include_types:
+        summary_front = templates.render_summary_front(display_name, spec)
+        summary_back = templates.render_summary_back(spec, svg_filename, decay_svg_filename)
+        cards.append(CardSpec("summary", summary_front, summary_back, media=svg_filename))
+
     return cards

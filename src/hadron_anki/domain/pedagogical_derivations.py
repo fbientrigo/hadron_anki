@@ -32,6 +32,26 @@ def derive_mass_display(mass_mev_exact: float) -> str:
     return f"{rounded} MeV"
 
 
+def _format_precise_mass(mass_mev_exact: float) -> str:
+    text = f"{round(float(mass_mev_exact), 2):.2f}"
+    return text.rstrip("0").rstrip(".")
+
+
+def derive_mass_summary(mass_bucket: str, mass_display: str, mass_mev_exact: float) -> str:
+    """Combine bucket, rounded display, and precise value into one teaching string.
+
+    Example: ('intermediate', '938 MeV', 938.272088) -> 'intermediate · ≈938 MeV (938.27 MeV)'.
+    """
+    if not isinstance(mass_mev_exact, (int, float)) or mass_mev_exact <= 0:
+        raise ValueError("mass_mev_exact must be a positive number")
+    if not isinstance(mass_bucket, str) or not mass_bucket.strip():
+        raise ValueError("mass_bucket must be a non-empty string")
+    if not isinstance(mass_display, str) or not mass_display.strip():
+        raise ValueError("mass_display must be a non-empty string")
+    precise = _format_precise_mass(float(mass_mev_exact))
+    return f"{mass_bucket} · ≈{mass_display} ({precise} MeV)"
+
+
 def derive_mass_bucket(mass_mev_exact: float) -> str:
     if not isinstance(mass_mev_exact, (int, float)) or mass_mev_exact <= 0:
         raise ValueError("mass_mev_exact must be a positive number")
@@ -242,9 +262,12 @@ def derive_pedagogical_fields(record: dict, family_records: list[dict] | None = 
     if not isinstance(mass_mev_exact, (int, float)) or mass_mev_exact <= 0:
         raise ValueError("exact.mass_mev_exact must be a positive number")
 
+    mass_display = derive_mass_display(float(mass_mev_exact))
+    mass_bucket = derive_mass_bucket(float(mass_mev_exact))
     derived: dict[str, Any] = {
-        "mass_display": derive_mass_display(float(mass_mev_exact)),
-        "mass_bucket": derive_mass_bucket(float(mass_mev_exact)),
+        "mass_display": mass_display,
+        "mass_bucket": mass_bucket,
+        "mass_summary": derive_mass_summary(mass_bucket, mass_display, float(mass_mev_exact)),
         "diagram_mode": derive_diagram_mode(record_map),
         "display_quark_summary": derive_display_quark_summary(record_map),
     }
