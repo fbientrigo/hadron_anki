@@ -1,0 +1,101 @@
+name: Card Preview
+
+# Manual trigger only: run it from the Actions tab when you want to see how the
+# cards currently render and check the build state.
+on:
+  workflow_dispatch:
+
+# Least privilege + what GitHub Pages deployment needs.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one preview deploy at a time; don't cancel an in-flight one.
+concurrency:
+  group: card-preview
+  cancel-in-progress: false
+
+jobs:
+  # 1) Gate everything on the test suite.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install (with dev deps)
+        run: pip install -e ".[dev]"
+      - name: Run tests
+        run: pytest -q
+
+  # 2) Build the full deck + a curated showcase, publish both as artifacts.
+  preview:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: pip install -e .
+
+      - name: Build full deck + preview gallery
+        run: python build_deck.py
+
+      - name: Build curated showcase (site/)
+        run: python tools/preview_snapshot.py --out site
+
+      - name: Bundle full gallery under site/full
+        run: |
+          mkdir -p site/full
+          cp -r _preview_out/* site/full/
+
+      - name: Write run summary
+        run: |
+          {
+            echo "## Card Preview"
+            echo ""
+            echo "| Item | Value |"
+            echo "| --- | --- |"
+            echo "| Tests | passed (gate job) |"
+            echo "| Curated particles | $(python -c "from tools.preview_snapshot import CURATED_IDS; print(len(CURATED_IDS))") |"
+            echo "| Curated SVGs | $(find site -name '*.svg' -not -path 'site/full/*' | wc -l) |"
+            echo "| Full gallery SVGs | $(find _preview_out -name '*.svg' | wc -l) |"
+            echo "| Decks (.apkg) | $(find decks -name '*.apkg' | wc -l) |"
+            echo ""
+            echo "Curated showcase is published to GitHub Pages (root); full gallery at \`/full/index.html\`."
+            echo "Downloadable copy: **card-preview** artifact below."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload downloadable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: card-preview
+          path: |
+            site/
+            decks/
+          if-no-files-found: error
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  # 3) Publish the showcase to GitHub Pages for in-browser viewing.
+  deploy:
+    needs: preview
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
