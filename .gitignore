@@ -22,6 +22,7 @@ decks/
 
 # Preview outputs
 _preview_out/
+site/
 temp_preview/
 .tmp/
 _test_output.txt
