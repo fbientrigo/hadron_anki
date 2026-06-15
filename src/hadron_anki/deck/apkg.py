@@ -67,34 +67,41 @@ def _particle_spec_from_mapping(p: dict[str, Any]) -> ParticleSpec:
 
 
 def build_apkg(
-    catalog: dict[str, Any], 
-    out_path: str, 
-    deck_name: str,
-    template_version: str, 
-    model_version: str,
-    card_types: Optional[list[str]] = None
+    catalog: Optional[dict[str, Any]] = None,
+    out_path: str = "",
+    deck_name: str = "",
+    template_version: str = "",
+    model_version: str = "",
+    card_types: Optional[list[str]] = None,
+    specs: Optional[list[ParticleSpec]] = None,
 ) -> None:
     """
-    Build an Anki .apkg file from a particle catalog.
-    
+    Build an Anki .apkg file from a particle catalog or ready-made specs.
+
     Args:
-        catalog: Dictionary containing particle data.
+        catalog: Dictionary containing particle data (thin/legacy path).
         out_path: Destination path for the .apkg file.
         deck_name: Name of the deck inside Anki (use '::' for subdecks).
         template_version: Version of the card template.
         model_version: Version of the Anki note model.
         card_types: List of card types to include. If None, all are generated.
+        specs: Pre-built ParticleSpec list (canonical path). Takes precedence
+            over ``catalog`` when provided.
     """
-    particles_any = catalog.get("particles")
-    if not isinstance(particles_any, list) or not particles_any:
-        raise ValueError("catalog must contain non-empty 'particles' list")
+    if specs is None:
+        if not isinstance(catalog, dict):
+            raise ValueError("build_apkg requires either 'catalog' or 'specs'")
+        particles_any = catalog.get("particles")
+        if not isinstance(particles_any, list) or not particles_any:
+            raise ValueError("catalog must contain non-empty 'particles' list")
 
-    particles: list[dict[str, Any]] = [p for p in particles_any if isinstance(p, dict)]
-    if not particles:
-        raise ValueError("catalog 'particles' must contain object items")
+        particles: list[dict[str, Any]] = [p for p in particles_any if isinstance(p, dict)]
+        if not particles:
+            raise ValueError("catalog 'particles' must contain object items")
 
-    specs = [_particle_spec_from_mapping(p) for p in particles]
-    specs.sort(key=lambda s: s.id)
+        specs = [_particle_spec_from_mapping(p) for p in particles]
+
+    specs = sorted(specs, key=lambda s: s.id)
 
     # Deterministic integer IDs (genanki expects int; Anki uses signed 64-bit).
     def _stable_int_id(tag: str) -> int:

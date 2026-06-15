@@ -142,12 +142,12 @@ def test_derive_catalog_pedagogical_fields_enriches_and_keeps_exact():
     )
 
 
-def test_legacy_adapter_still_fails_for_flavor_superposition_pi0():
+def test_legacy_adapter_supports_flavor_superposition_pi0():
     particles = _load_example_particles()
     pi0 = _particle_by_id(particles, "pi0")
 
-    with pytest.raises(
-        ValueError,
-        match="legacy adapter does not support flavor_superposition for particle pi0",
-    ):
-        canonical_to_legacy_particlespec(pi0)
+    spec = canonical_to_legacy_particlespec(pi0)
+
+    assert spec.quarks == []
+    assert spec.diagram_mode == "flavor_superposition"
+    assert spec.display_quark_summary == "(u ubar - d dbar)/sqrt(2)"

@@ -14,4 +14,10 @@ class ParticleSpec:
     mass: Optional[float] = None
     decay_diagram: Optional[dict] = None
     decay_label: Optional[str] = None
+    # Canonical/pedagogical enrichments (optional so legacy callers stay valid).
+    multiplet: Optional[str] = None
+    mass_summary: Optional[str] = None
+    display_quark_summary: Optional[str] = None
+    diagram_mode: Optional[str] = None
+    decay: Optional[dict] = None
 

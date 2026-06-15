@@ -118,6 +118,38 @@ def generate_preview(
                 )
         grouped_html.append("</div>")
 
+    # Summary cards (the big descriptive card) — opt-in via card_types.
+    if card_types is not None and "summary" in card_types:
+        summary_dir = output_path / "summary"
+        summary_dir.mkdir(exist_ok=True)
+        grouped_html.append("<h2>Summary Cards</h2>")
+        grouped_html.append('<div class="gallery">')
+        for spec in sorted_specs:
+            (summary_dir / f"{spec.id}.svg").write_text(render_svg(spec), encoding="utf-8")
+            decay_svg_filename = None
+            if spec.decay_diagram:
+                decay_svg_filename = f"summary/{spec.id}_decay.svg"
+                (summary_dir / f"{spec.id}_decay.svg").write_text(
+                    render_feynman_svg(spec.decay_diagram, math_cache_dir=summary_dir),
+                    encoding="utf-8",
+                )
+            cards = generate_cards(
+                spec,
+                f"summary/{spec.id}.svg",
+                include_types=["summary"],
+                decay_svg_filename=decay_svg_filename,
+            )
+            for card in cards:
+                grouped_html.append(
+                    '<div class="card-pair">'
+                    f'<div class="side-label">Front: {card.card_type}</div>'
+                    f'<div class="card-frame">{card.front_html}</div>'
+                    f'<div class="side-label">Back: {card.card_type}</div>'
+                    f'<div class="card-frame">{card.back_html}</div>'
+                    '</div>'
+                )
+        grouped_html.append("</div>")
+
     if feynman_html:
         grouped_html.extend(feynman_html)
 

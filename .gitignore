@@ -17,6 +17,9 @@ ENV/
 .vscode/
 .sisyphus/
 
+# Generated decks
+decks/
+
 # Preview outputs
 _preview_out/
 temp_preview/

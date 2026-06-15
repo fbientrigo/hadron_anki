@@ -138,6 +138,41 @@ CARD_CSS: str = """\
     margin-top: 12px;
 }
 
+.badge.octet { background: #5a6b7c; }
+
+/* ── Modular concept sections (summary card + future split cards) ── */
+
+.section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+    border-top: 1px solid #ece8e3;
+}
+
+.section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9a9590;
+}
+
+.mass-summary {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d2a26;
+}
+
+.decay-line {
+    font-size: 18px;
+    font-weight: 500;
+    color: #2d2a26;
+    font-family: "Georgia", "Times New Roman", serif;
+}
+
 /* ── Anki Default Override ── */
 
 hr#answer {
