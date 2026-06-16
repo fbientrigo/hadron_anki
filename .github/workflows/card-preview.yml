@@ -5,16 +5,9 @@ name: Card Preview
 on:
   workflow_dispatch:
 
-# Least privilege + what GitHub Pages deployment needs.
+# Least privilege: only read the repo; artifacts need nothing more.
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-# Allow one preview deploy at a time; don't cancel an in-flight one.
-concurrency:
-  group: card-preview
-  cancel-in-progress: false
 
 jobs:
   # 1) Gate everything on the test suite.
@@ -30,7 +23,7 @@ jobs:
       - name: Run tests
         run: pytest -q
 
-  # 2) Build the full deck + a curated showcase, publish both as artifacts.
+  # 2) Build the full deck + a curated showcase, publish both as one artifact.
   preview:
     needs: test
     runs-on: ubuntu-latest
@@ -66,8 +59,8 @@ jobs:
             echo "| Full gallery SVGs | $(find _preview_out -name '*.svg' | wc -l) |"
             echo "| Decks (.apkg) | $(find decks -name '*.apkg' | wc -l) |"
             echo ""
-            echo "Curated showcase is published to GitHub Pages (root); full gallery at \`/full/index.html\`."
-            echo "Downloadable copy: **card-preview** artifact below."
+            echo "Download the **card-preview** artifact below, unzip it, and open"
+            echo "\`site/index.html\` (curated showcase) or \`site/full/index.html\` (full gallery)."
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload downloadable artifact
@@ -78,24 +71,3 @@ jobs:
             site/
             decks/
           if-no-files-found: error
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
-  # 3) Publish the showcase to GitHub Pages for in-browser viewing.
-  deploy:
-    needs: preview
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
