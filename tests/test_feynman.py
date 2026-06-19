@@ -50,10 +50,12 @@ def test_feynman_svg_contains_edges():
     assert "stroke-dasharray" in out   # scalar present
 
 
-def test_feynman_svg_has_arrowhead_marker():
+def test_feynman_svg_has_arrowhead_path():
     out = render_feynman_svg(PI_PLUS_DECAY)
-    assert "<marker" in out
-    assert "marker-end" in out
+    # Arrowheads are flat <path> triangles, not <marker>-referenced
+    assert "<marker" not in out
+    assert "marker-end" not in out
+    assert "<path" in out
 
 
 def test_feynman_svg_contains_labels():
@@ -83,13 +85,14 @@ def test_feynman_svg_empty_diagram():
 
 
 def test_feynman_renderer_uses_math_label_assets_when_available(tmp_path):
-    """When a math_cache_dir is provided, it should render nested <svg> tags."""
+    """When a math_cache_dir is provided, math labels render as flat <g transform> groups."""
     out = tmp_path / "math_labels"
     svg = render_feynman_svg(PI_PLUS_DECAY, math_cache_dir=out)
-    
-    # original outer SVG + 3 nested inner SVGs for the labels
-    assert svg.count("<svg") >= 4
-    
+
+    # Single flat outer SVG, no nested <svg> viewports
+    assert svg.count("<svg") == 1
+    assert svg.count('<g transform="translate') == 3
+
     # Make sure text fallback is no longer used for these explicitly tex'd nodes
     assert ">pi+<" not in svg
 
@@ -113,10 +116,11 @@ def test_identical_math_labels_are_reused(tmp_path):
         ]
     }
     svg = render_feynman_svg(dag, math_cache_dir=out)
-    
-    # outer SVG + 2 nested SVGs
-    assert svg.count("<svg") >= 3
-    
+
+    # Single flat outer SVG + 2 flattened <g transform> label groups
+    assert svg.count("<svg") == 1
+    assert svg.count('<g transform="translate') == 2
+
     # We should only have 1 file generated since it's cached!
     generated = list(out.glob("mathlabel_*.svg"))
     assert len(generated) == 1

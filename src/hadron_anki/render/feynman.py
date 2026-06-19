@@ -48,16 +48,6 @@ def _esc(text: str) -> str:
     )
 
 
-def _arrow_marker(marker_id: str, color: str) -> str:
-    """Returns an SVG <defs> arrowhead marker definition."""
-    return (
-        f'<marker id="{marker_id}" markerWidth="8" markerHeight="8" '
-        f'refX="6" refY="3" orient="auto">'
-        f'<path d="M0,0 L0,6 L8,3 z" fill="{color}"/>'
-        f'</marker>'
-    )
-
-
 def _label_offset(x1: float, y1: float, x2: float, y2: float) -> tuple[float, float]:
     """Returns a perpendicular offset point for a mid-line label."""
     mx = (x1 + x2) / 2
@@ -72,16 +62,27 @@ def _label_offset(x1: float, y1: float, x2: float, y2: float) -> tuple[float, fl
 
 # ── Line primitives ─────────────────────────────────────────────────
 
-def _fermion_line(x1: float, y1: float, x2: float, y2: float, marker_id: str) -> str:
+def _fermion_line(x1: float, y1: float, x2: float, y2: float) -> str:
     # Shorten end so arrow doesn't overlap vertex circle
     dx, dy = x2 - x1, y2 - y1
     length = math.hypot(dx, dy) or 1.0
     ux, uy = dx / length, dy / length
+    px, py = -uy, ux
     ex, ey = x2 - ux * 10, y2 - uy * 10
+
+    # Explicit arrowhead triangle (flat geometry, no <marker> reference)
+    tip_x, tip_y = ex + ux * 8, ey + uy * 8
+    base1_x, base1_y = ex + px * 3, ey + py * 3
+    base2_x, base2_y = ex - px * 3, ey - py * 3
+    arrowhead = (
+        f'<path d="M {base1_x:.1f} {base1_y:.1f} L {base2_x:.1f} {base2_y:.1f} '
+        f'L {tip_x:.1f} {tip_y:.1f} Z" fill="{_COL_FERM}"/>'
+    )
+
     return (
         f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{ex:.1f}" y2="{ey:.1f}" '
-        f'stroke="{_COL_FERM}" stroke-width="1.5" '
-        f'marker-end="url(#{marker_id})"/>'
+        f'stroke="{_COL_FERM}" stroke-width="1.5"/>'
+        f'{arrowhead}'
     )
 
 
@@ -151,14 +152,9 @@ def render_feynman_svg(diagram_spec: dict[str, Any], math_cache_dir: Optional[st
     }
 
     # Collect SVG parts
-    defs: list[str] = []
     edges_svg: list[str] = []
     vertices_svg: list[str] = []
     labels_svg: list[str] = []
-
-    # Arrow marker (shared for all fermion edges)
-    marker_id = "arrow"
-    defs.append(_arrow_marker(marker_id, _COL_FERM))
 
     # Edges — sorted for determinism
     for edge in sorted(edges_raw, key=lambda e: (e["from"], e["to"])):
@@ -172,7 +168,7 @@ def render_feynman_svg(diagram_spec: dict[str, Any], math_cache_dir: Optional[st
         x2, y2 = nodes[dst_id]
 
         if etype == "fermion":
-            edges_svg.append(_fermion_line(x1, y1, x2, y2, marker_id))
+            edges_svg.append(_fermion_line(x1, y1, x2, y2))
         elif etype == "boson":
             edges_svg.append(_boson_path(x1, y1, x2, y2))
         else:  # scalar / default
@@ -184,22 +180,29 @@ def render_feynman_svg(diagram_spec: dict[str, Any], math_cache_dir: Optional[st
             asset_path = generate_math_label_asset(label_tex, cache_dir=math_cache_dir)
             
             asset_svg = asset_path.read_text(encoding="utf-8")
-            
-            import re
+
             vb_match = re.search(r'viewBox="([^"]+)"', asset_svg)
             vb = vb_match.group(1) if vb_match else "0 0 120 40"
-            
+            _vb_parts = vb.split()
+            vb_w = float(_vb_parts[2]) if len(_vb_parts) == 4 else 120.0
+            vb_h = float(_vb_parts[3]) if len(_vb_parts) == 4 else 40.0
+
             svg_start = asset_svg.find("<svg")
             content_start = asset_svg.find(">", svg_start) + 1
             content_end = asset_svg.rfind("</svg>")
             inner_content = asset_svg[content_start:content_end] if (content_start > 0 and content_end > 0) else ""
 
-            # Math labels scale neatly into a centered bounding box
+            # Math labels scale neatly into a centered bounding box.
+            # Flattened via <g transform> instead of a nested <svg> viewport
+            # for compatibility with vector design-tool SVG importers.
             w, h = 48, 24
+            sx = w / vb_w if vb_w else 1.0
+            sy = h / vb_h if vb_h else 1.0
+            tx, ty = lx - w / 2, ly - h / 2
             labels_svg.append(
-                f'<svg x="{lx - w/2:.1f}" y="{ly - h/2:.1f}" width="{w}" height="{h}" viewBox="{vb}">'
+                f'<g transform="translate({tx:.1f},{ty:.1f}) scale({sx:.4f},{sy:.4f})">'
                 f'{inner_content}'
-                f'</svg>'
+                f'</g>'
             )
         elif label:
             labels_svg.append(
@@ -217,11 +220,8 @@ def render_feynman_svg(diagram_spec: dict[str, Any], math_cache_dir: Optional[st
             f'fill="{_COL_VERT}" stroke="{_COL_VBRD}" stroke-width="1.5"/>'
         )
 
-    defs_block = f'<defs>{"".join(defs)}</defs>' if defs else ""
-
     body = (
-        defs_block
-        + "".join(edges_svg)
+        "".join(edges_svg)
         + "".join(vertices_svg)
         + "".join(labels_svg)
     )
